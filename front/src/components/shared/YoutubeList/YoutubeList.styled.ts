@@ -5,7 +5,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
-  margin: 1.5rem 1rem 2rem 1rem;
+  margin: 1.5rem 1rem 1.75rem 1rem;
   font-size: 2rem;
   font-weight: bold;
 `;
@@ -35,15 +35,15 @@ export const VideoWrapper = styled.div`
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
-      width: 100%;
+      width: 90%;
       flex-direction: row;
     }
 
     ${theme.media.desktop} {
       width: 40%;
       flex-direction: row;
-      margin: 0.5rem;
-      padding: 2.125rem;
+      margin: 0.75rem;
+      padding: 2rem;
     }
   `}
 `;
@@ -51,8 +51,10 @@ export const VideoWrapper = styled.div`
 export const VideoThumbnailDiv = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0.75rem;
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
@@ -69,11 +71,11 @@ export const VideoThumbnailDiv = styled.div`
 export const VideoThumbnail = styled.img`
   width: 100%;
   object-fit: contain;
+  margin-bottom: 0.75rem;
 `;
 
 export const VideoTextArea = styled.div`
   width: 100%;
-  margin: 1rem 0;
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
@@ -122,12 +124,7 @@ export const VideoDescription = styled.p`
       -webkit-line-clamp: 5;
     }
     ${theme.media.desktop} {
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 5;
     }
   `}
 `;
-
-export const VideoStatisticsArea = styled.div`
-  display: flex;
-`;
-export const VideoStatisticsParagraph = styled.p``;
