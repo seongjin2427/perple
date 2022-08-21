@@ -31,6 +31,12 @@ export interface GetPopularVideosType {
       };
       tags: string[];
     };
+    statistics: {
+      commentCount: string;
+      favoriteCount: string;
+      likeCount: string;
+      viewCount: string;
+    };
   }[];
   prevPageToken: string;
   nextPageToken: string;
@@ -40,13 +46,21 @@ export interface GetPopularVideosType {
   };
 }
 
-export const getPopularVideos = async () => {
-  console.log(process.env.REACT_APP_YOUTUBE_BASE_URL);
+interface getPopularVideosParamsType {
+  token: string | undefined;
+  divide: 'snippet' | 'statistics';
+}
+
+export const getPopularVideos = async ({
+  token,
+  divide,
+}: getPopularVideosParamsType) => {
+  const urlPageToken = token || '';
+
   try {
     const { data } = await instance.get<GetPopularVideosType>(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet&pageToken=CBkQAA&chart=mostPopular&maxResults=25&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?part=${divide}&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
     );
-    console.log(data);
     return data;
   } catch (e) {
     console.log(e);

@@ -4,10 +4,10 @@ import { HEADER_HEIGHT } from 'constants/common';
 export const Container = styled.div`
   width: 100%;
   height: ${HEADER_HEIGHT};
-  background: red;
   display: flex;
   justify-content: space-between;
   position: fixed;
+  background: red;
   z-index: 5000;
 `;
 
@@ -23,10 +23,11 @@ interface ActiveType {
 export const SideMenu = styled.div<ActiveType>`
   width: 20rem;
   height: calc(100% - ${HEADER_HEIGHT});
-  margin-top: ${HEADER_HEIGHT};
-  background: lightgreen;
   position: fixed;
   right: 0;
+  margin-top: ${HEADER_HEIGHT};
+  background: lightgreen;
+
   opacity: 0;
   transition: transform 0.2s ease-in-out, opacity 0.2s;
   transform: translateX(100%);
