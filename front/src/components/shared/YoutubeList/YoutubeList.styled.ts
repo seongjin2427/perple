@@ -5,6 +5,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
+  color: ${({ theme }) => theme.colors.primary.hex};
   margin: 1.5rem 1rem 1.75rem 1rem;
   font-size: 2rem;
   font-weight: bold;
@@ -22,15 +23,16 @@ export const VideoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0.375rem;
+  margin-bottom: 2rem;
   padding: 2rem;
-  border: 1px black solid;
+  border: 1px solid ${({ theme }) => theme.colors.primary.hex};
   border-radius: 2rem;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  color: ${({ theme }) => theme.colors.primary.hex};
 
   :hover {
     transform: translate(-2.5px, -2.5px);
-    box-shadow: 2.5px 2.5px 2.5px black;
+    box-shadow: 2.5px 2.5px 5px ${({ theme }) => theme.colors.primary.hex};
   }
 
   ${({ theme }) => css`
