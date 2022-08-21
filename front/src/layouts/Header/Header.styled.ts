@@ -7,6 +7,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   position: fixed;
+  background: red;
   z-index: 5000;
   background: white;
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary.hex};
