@@ -11,7 +11,6 @@ export const Header = styled.header``;
 export const MainWrapper = styled.div`
   max-width: 1280px;
   min-height: 90vh;
-  background: purple;
   padding: 8px;
   padding-top: calc(${HEADER_HEIGHT} + 8px);
 
