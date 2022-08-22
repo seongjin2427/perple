@@ -5,12 +5,6 @@ export const UNAUTH_HEADER_MENU = [
     link: '/',
     onClick: () => {},
   },
-  {
-    text: '회원가입',
-    name: 'join',
-    link: '/',
-    onClick: () => {},
-  },
 ];
 
 export const AUTH_HEADER_MENU = [

@@ -1,6 +1,8 @@
 import React from 'react';
 import { DefaultTheme, StyledComponent } from 'styled-components';
 
+import useModal from 'hooks/useModal';
+
 import * as S from './Menu.styled';
 
 interface MenuProps {
@@ -14,10 +16,14 @@ interface MenuProps {
 }
 
 const Menu = ({ menu, component: Component }: MenuProps) => {
+  const modalInfo = useModal();
+  const [, actions] = modalInfo;
   return (
     <>
       {menu.map(({ name, link, text }, idx) => (
-        <Component key={name}>{text}</Component>
+        <Component key={name} onClick={actions.open}>
+          {text}
+        </Component>
       ))}
     </>
   );

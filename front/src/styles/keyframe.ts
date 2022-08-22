@@ -1,21 +1,14 @@
 import { keyframes } from 'styled-components';
 
-export const SlideToLeft = keyframes`
+export const SLIDE_DOWN = keyframes`
   0% {
-    opacity: 1;
+    dislpay: block;
+    opacity: 0;
   }
   100% {
+    display: block;
     opacity: 1;
-    transform: translateX(0);
+    top: 45%;
   }
-`;
 
-export const SlideToRight = keyframes`
-  0% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  100% {
-    opacity: 1;
-  }
 `;
