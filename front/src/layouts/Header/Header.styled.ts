@@ -99,9 +99,11 @@ export const HeaderMenuLi = styled.li`
 `;
 
 export const MenuButton = styled.button`
-  display: block;
-  width: 3rem;
-  background: lightpink;
+  display: flex;
+  width: 4rem;
+  align-items: center;
+  background: none;
+  border: none;
 
   ${({ theme }) => css`
     ${theme.media.tablet} {

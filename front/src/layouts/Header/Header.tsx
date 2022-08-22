@@ -4,6 +4,7 @@ import SideMenu from 'layouts/SideMenu';
 import Menu from 'components/shared/Menu';
 import * as S from './Header.styled';
 import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
+import HamburgerButton from 'components/shared/HamburgerButton';
 
 const Header = () => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -12,9 +13,7 @@ const Header = () => {
 
   return (
     <S.Container>
-      <S.LogoDiv>
-        {/* <S.Logo src={require('../../assets/logo.png')} /> */}
-      </S.LogoDiv>
+      <S.LogoDiv />
       <S.SearchDiv>
         <S.SearchInput />
         <S.SearchButton>검색</S.SearchButton>
@@ -28,7 +27,9 @@ const Header = () => {
           )}
         </S.HeaderMenuUl>
       </S.HeaderMenuDiv>
-      <S.MenuButton type="button" onClick={() => setToggle(!toggle)} />
+      <S.MenuButton onClick={() => setToggle(!toggle)}>
+        <HamburgerButton width={50} toggle={toggle} />
+      </S.MenuButton>
       <SideMenu active={toggle} />
     </S.Container>
   );
