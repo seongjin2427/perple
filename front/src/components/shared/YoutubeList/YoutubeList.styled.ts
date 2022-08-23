@@ -21,10 +21,9 @@ export const VideoWrapper = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 2rem;
+  margin: 0.25rem;
+  padding: 1.75rem;
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};
   border-radius: 2rem;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -37,14 +36,13 @@ export const VideoWrapper = styled.div`
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
-      width: 90%;
-      flex-direction: row;
+      width: 35%;
+      margin: 1rem;
     }
-
+    
     ${theme.media.desktop} {
-      width: 40%;
-      flex-direction: row;
-      margin: 0.75rem;
+      width: 25%;
+      margin: 0.5rem;
       padding: 2rem;
     }
   `}
@@ -52,22 +50,12 @@ export const VideoWrapper = styled.div`
 
 export const VideoThumbnailDiv = styled.div`
   width: 100%;
+  aspect-ratio: 2 / 1.5;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 0.75rem;
-
-  ${({ theme }) => css`
-    ${theme.media.tablet} {
-      width: 35%;
-      margin-right: 1rem;
-    }
-
-    ${theme.media.desktop} {
-      width: 50%;
-    }
-  `}
 `;
 
 export const VideoThumbnail = styled.img`
@@ -76,20 +64,15 @@ export const VideoThumbnail = styled.img`
   margin-bottom: 0.75rem;
 `;
 
+export const VideoIframe = styled.iframe`
+  width: 100%;
+  aspect-ratio: 2 / 1.5;
+  object-fit: contain;
+  margin-bottom: 0.75rem;
+`;
+
 export const VideoTextArea = styled.div`
   width: 100%;
-
-  ${({ theme }) => css`
-    ${theme.media.tablet} {
-      width: 65%;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-    }
-    ${theme.media.desktop} {
-      width: 50%;
-    }
-  `}
 `;
 
 export const VideoTitle = styled.p`
@@ -109,6 +92,7 @@ export const VideoTitle = styled.p`
 export const VideoChannelTitle = styled(VideoTitle)`
   height: 1.125rem;
   font-size: 0.75rem;
+  font-weight: 500;
 `;
 
 export const VideoDescription = styled.p`

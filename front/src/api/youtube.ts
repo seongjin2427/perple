@@ -12,6 +12,9 @@ export interface GetPopularVideosType {
     title: string;
     etag: string;
     kind: string;
+    player: {
+      embedHhtml: string;
+    };
     snippet: {
       categoryId: string;
       channelId: string;
@@ -48,19 +51,16 @@ export interface GetPopularVideosType {
 
 interface getPopularVideosParamsType {
   token: string | undefined;
-  divide: 'snippet' | 'statistics';
 }
 
-export const getPopularVideos = async ({
-  token,
-  divide,
-}: getPopularVideosParamsType) => {
+export const getPopularVideos = async ({token}: getPopularVideosParamsType) => {
   const urlPageToken = token || '';
 
   try {
     const { data } = await instance.get<GetPopularVideosType>(
-      `https://www.googleapis.com/youtube/v3/videos?part=${divide}&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,player&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
     );
+    console.log(data)
     return data;
   } catch (e) {
     console.log(e);
