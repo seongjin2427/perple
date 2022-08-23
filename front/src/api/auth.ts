@@ -1,17 +1,25 @@
-export const getGoogleAuth = async () => {
-  const OAUTH2_SCOPES = 'https://www.googleapis.com/auth/youtube';
+import instance from './instance';
+import qs from 'qs';
 
-  async function start() {
-    const gapi = await window.gapi;
+const getGoogleAuth = async () => {
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  });
 
-    const initialized = async () => {
-      await gapi.client.init({
-        apiKey: process.env.REACT_APP_YOUTUBE_API_KEY,
-      });
-    };
+  const code = query.code;
 
-    gapi.load('client', initialized);
-  }
+  const { data } = await instance.post(
+    'https://www.googleapis.com/oauth2/v4/token',
+    {
+      code,
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      client_secret: process.env.REACT_APP_GOOGLE_CLIENT_SECURE_PASSWORD,
+      grant_type: 'authorization_code',
+      redirect_uri: 'http://localhost:3000',
+    },
+  );
 
-  start();
+  console.log(data);
 };
+
+export default getGoogleAuth;

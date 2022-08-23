@@ -9,9 +9,8 @@ export const Container = styled.div`
 export const Header = styled.header``;
 
 export const MainWrapper = styled.div`
-  max-width: 1280px;
+  max-width: 100%;
   min-height: 90vh;
-  background: purple;
   padding: 8px;
   padding-top: calc(${HEADER_HEIGHT} + 8px);
 
