@@ -1,16 +1,11 @@
 import React from 'react';
 
-import useGoogle from 'hooks/useGoogle';
 import * as S from './LoginComponent.styled';
 
 const LoginComponent = () => {
-  const { loginUri } = useGoogle({
-    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-  });
-
   return (
     <S.Container>
-      <a href={loginUri}>
+      <a href={`${process.env.REACT_APP_GOOGLE_LOGIN_URL}`}>
         <S.GoogleLoginDiv>
           <S.GoogleIcon>
             <S.GoogleIconImg src={require('../../assets/google_icon.png')} />
