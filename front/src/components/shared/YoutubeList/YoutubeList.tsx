@@ -14,16 +14,10 @@ const YoutubeList = () => {
   const getVideos = useCallback(
     async (token?: string) => {
       const fetchedVideos: GetPopularVideosType | undefined =
-        await getPopularVideos({ divide: 'snippet', token });
-
-      const fetchedStatistics: GetPopularVideosType | undefined =
-        await getPopularVideos({
-          divide: 'statistics',
-          token,
-        });
+        await getPopularVideos({ token });
 
       setVideos(fetchedVideos);
-      setStatistics(fetchedStatistics);
+      setStatistics(fetchedVideos);
 
       window.scrollTo({ top: 0 });
     },
@@ -42,7 +36,13 @@ const YoutubeList = () => {
           <Fragment key={item.id}>
             <S.VideoWrapper>
               <S.VideoThumbnailDiv>
-                <S.VideoThumbnail src={item.snippet.thumbnails.high.url} />
+                <S.VideoIframe
+                  title="영상"
+                  src={`//www.youtube.com/embed/${item.id}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
                 {statistics?.items[idx].id === item.id && (
                   <VideoStatistics
                     statistics={statistics?.items[idx].statistics}
@@ -54,9 +54,6 @@ const YoutubeList = () => {
                 <S.VideoChannelTitle>
                   {item.snippet.channelTitle}
                 </S.VideoChannelTitle>
-                <S.VideoDescription>
-                  {item.snippet.localized.description}
-                </S.VideoDescription>
               </S.VideoTextArea>
             </S.VideoWrapper>
           </Fragment>
