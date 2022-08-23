@@ -42,7 +42,7 @@ export const SideMenuUl = styled.ul`
 `;
 
 export const SideMenuLi = styled.li`
-  height: 4rem;
+  margin-bottom: 2.5rem;
   font-size: 1.75rem;
   font-weight: bold;
   cursor: pointer;

@@ -1,19 +1,24 @@
 import React from 'react';
-
-import Main from 'pages/Main';
-import GlobalStyle from 'styles/global';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-function App() {
+import GlobalStyle from 'styles/global';
+import { store } from 'store/store';
+import Main from 'pages/Main';
+
+const App = () => {
+
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </>
   );
 }
