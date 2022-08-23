@@ -1,4 +1,4 @@
-import qs from 'qs';
+import qs from 'qs'
 
 const AUTHORIZE_URI = `https://accounts.google.com/o/oauth2/v2/auth`;
 

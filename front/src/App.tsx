@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import GlobalStyle from 'styles/global';
-import { store } from 'store/store';
 import Main from 'pages/Main';
+import { store } from 'store/store';
+import GlobalStyle from 'styles/global';
 
 const App = () => {
 

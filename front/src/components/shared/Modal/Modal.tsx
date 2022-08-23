@@ -1,6 +1,6 @@
-import useModal from 'hooks/useModal';
 import React from 'react';
 
+import useModal from 'hooks/useModal';
 import * as S from './Modal.styled';
 
 interface ModalProps {
