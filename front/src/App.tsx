@@ -1,12 +1,13 @@
 import React from 'react';
-
-import Main from 'pages/Main';
-import GlobalStyle from 'styles/global';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from 'store/store';
 
-function App() {
+import GlobalStyle from 'styles/global';
+import { store } from 'store/store';
+import Main from 'pages/Main';
+
+const App = () => {
+
   return (
     <>
       <GlobalStyle />

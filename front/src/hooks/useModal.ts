@@ -2,20 +2,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, openModal } from 'store/globalSlice';
 import { RootState } from 'store/store';
 
-export interface ModalActionsType {
+interface ModalActionType {
   open: () => void;
   close: () => void;
 }
 
-const useModal = (): [boolean, ModalActionsType] => {
-  const modalBoolean = useSelector(({ global }: RootState) => global.modal);
+const useModal = (): [boolean, ModalActionType] => {
   const dispatch = useDispatch();
+  const modalShowBoolean = useSelector(({ global }: RootState) => global.modal);
 
-  const actions = {
-    open: () => dispatch(openModal()),
-    close: () => dispatch(closeModal()),
+  const actions: ModalActionType = {
+    open: () => {
+      dispatch(openModal());
+    },
+    close: () => {
+      dispatch(closeModal());
+    },
   };
-  return [modalBoolean, actions];
+
+  return [modalShowBoolean, actions];
 };
 
 export default useModal;

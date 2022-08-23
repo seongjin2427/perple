@@ -1,27 +1,32 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DefaultTheme, StyledComponent } from 'styled-components';
 
 import useModal from 'hooks/useModal';
 
-import * as S from './Menu.styled';
-
 interface MenuProps {
-  menu: {
+  isAuth?: boolean;
+  menus: {
     text: string;
     name: string;
     link: string;
-    onClick: () => void;
   }[];
-  component: StyledComponent<'li', DefaultTheme, {}, never>;
+  element: StyledComponent<'li', DefaultTheme, {}, never>;
 }
 
-const Menu = ({ menu, component: Component }: MenuProps) => {
-  const modalInfo = useModal();
-  const [, actions] = modalInfo;
+const Menu = ({ isAuth, menus, element: Component }: MenuProps) => {
+  const navigate = useNavigate();
+  const [, { open }] = useModal();
+
+  const doFunction = (link: string) => {
+    if (!isAuth) open();
+    else navigate(link);
+  };
+
   return (
     <>
-      {menu.map(({ name, link, text }, idx) => (
-        <Component key={name} onClick={actions.open}>
+      {menus.map(({ text, link, name }) => (
+        <Component key={name} onClick={() => doFunction(link)}>
           {text}
         </Component>
       ))}

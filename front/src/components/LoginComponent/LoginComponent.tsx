@@ -10,7 +10,14 @@ const LoginComponent = () => {
 
   return (
     <S.Container>
-      <a href={loginUri}>로그인 버튼</a>
+      <a href={loginUri}>
+        <S.GoogleLoginDiv>
+          <S.GoogleIcon>
+            <S.GoogleIconImg src={require('../../assets/google_icon.png')} />
+          </S.GoogleIcon>
+          <S.GoogleIconText>구글로 로그인하기</S.GoogleIconText>
+        </S.GoogleLoginDiv>
+      </a>
     </S.Container>
   );
 };

@@ -1,22 +1,21 @@
-import { ModalActionsType } from 'hooks/useModal';
-import React, { ReactNode } from 'react';
+import useModal from 'hooks/useModal';
+import React from 'react';
 
 import * as S from './Modal.styled';
 
 interface ModalProps {
-  children: ReactNode;
   title: string;
-  modalInfo: [boolean, ModalActionsType];
+  element: JSX.Element;
 }
 
-const Modal = ({ children, title, modalInfo }: ModalProps) => {
-  const [modalBoolean, actions] = modalInfo;
+const Modal = ({ title, element }: ModalProps) => {
+  const [modalShowBoolean, { close }] = useModal();
 
   return (
-    <S.Container active={modalBoolean} onClick={actions.close}>
+    <S.Container active={modalShowBoolean} onClick={close}>
       <S.ModalWrapper>
         <S.Title>{title}</S.Title>
-        {children}
+        {element}
       </S.ModalWrapper>
     </S.Container>
   );

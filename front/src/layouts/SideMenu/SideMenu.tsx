@@ -17,10 +17,10 @@ const SideMenu = ({ active }: SideMenuProps) => {
         {isAuth ? (
           <>
             <S.UserDiv>{userId}님 어서오세요😄</S.UserDiv>
-            <Menu menu={AUTH_HEADER_MENU} component={S.SideMenuLi} />
+            <Menu menus={AUTH_HEADER_MENU} element={S.SideMenuLi} />
           </>
         ) : (
-          <Menu menu={UNAUTH_HEADER_MENU} component={S.SideMenuLi} />
+          <Menu menus={UNAUTH_HEADER_MENU} element={S.SideMenuLi} />
         )}
       </S.SideMenuUl>
     </S.Container>
