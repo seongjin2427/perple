@@ -3,13 +3,13 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
   findUserBySnsId,
-  findUserByObjectId,
   saveUser,
 } from '@/src/service/user';
 import { makeRefreshToken, makeToken, verifyToken } from '@/src/utils/jwt';
+import { IUserDocument } from '@/src/models/user';
 
 interface RefreshTokenType {
-  userId: string;
+  userInfo: IUserDocument;
   iat: number;
   exp: number;
 }
@@ -24,19 +24,17 @@ export const getToken = async (
     return res.json({});
   }
   try {
-    const { userId } = verifyToken(clientRefreshToken) as RefreshTokenType;
+    const { userInfo } = verifyToken(clientRefreshToken) as RefreshTokenType;
 
-    if (userId) {
-      const accessToken = makeToken(userId);
-      const refreshToken = makeRefreshToken(userId);
+    if (userInfo) {
+      const accessToken = makeToken(userInfo);
+      const refreshToken = makeRefreshToken(userInfo);
 
-      // const userInfo = await findUserByObjectId(userId);
-      // console.log('userInfo', userInfo);
 
       res.cookie('refresh_token', refreshToken, {
         httpOnly: true,
       });
-      return res.json({ accessToken });
+      return res.json({ accessToken, userInfo });
     }
   } catch (e) {
     console.log(e);
@@ -100,14 +98,16 @@ export const getGoogleToken = async (
     };
     // console.log(userInformation);
 
-    const userId = await findUserBySnsId('google', sub);
+    const userInfo = await findUserBySnsId('google', sub);
     let refreshToken: string | undefined;
 
-    if (userId) {
-      refreshToken = makeRefreshToken(userId);
+    if (userInfo) {
+      refreshToken = makeRefreshToken(userInfo);
     } else {
-      const signUpUserId = await saveUser(userInformation);
-      refreshToken = makeRefreshToken(signUpUserId);
+      const signUpUser = await saveUser(userInformation);
+      if (typeof signUpUser !== 'string') {
+        refreshToken = makeRefreshToken(signUpUser);
+      }
     }
     res.cookie('refresh_token', refreshToken, { httpOnly: true });
 

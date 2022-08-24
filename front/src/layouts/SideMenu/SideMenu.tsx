@@ -11,18 +11,28 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ active }: SideMenuProps) => {
-  const isAuth = useSelector(({ global }: RootState) => global.isLogin);
-  const userId = '뚠뚠이감자';
+  const { isLogin: isAuth, userInfo } = useSelector(
+    ({ global }: RootState) => global,
+  );
+
   return (
     <S.Container active={active}>
       <S.SideMenuUl>
         {isAuth ? (
           <>
-            <S.UserDiv>{userId}님 어서오세요😄</S.UserDiv>
-            <Menu menus={AUTH_HEADER_MENU} element={S.SideMenuLi} />
+            <S.UserDiv>{userInfo.nickname}님 어서오세요 😄</S.UserDiv>
+            <Menu
+              isAuth={isAuth}
+              menus={AUTH_HEADER_MENU}
+              element={S.SideMenuLi}
+            />
           </>
         ) : (
-          <Menu menus={UNAUTH_HEADER_MENU} element={S.SideMenuLi} />
+          <Menu
+            isAuth={isAuth}
+            menus={UNAUTH_HEADER_MENU}
+            element={S.SideMenuLi}
+          />
         )}
       </S.SideMenuUl>
     </S.Container>

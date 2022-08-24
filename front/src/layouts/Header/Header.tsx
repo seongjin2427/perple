@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { RootState } from 'store/store';
 import SideMenu from 'layouts/SideMenu';
 import Menu from 'components/shared/Menu';
 import HamburgerButton from 'components/shared/HamburgerButton';
 import Modal from 'components/shared/Modal';
 import LoginComponent from 'components/LoginComponent';
+
+import { userInfoSet, userLogin } from 'store/globalSlice';
+import instance from 'api/instance';
 import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/store';
-import { useDispatch } from 'react-redux';
-import instance from 'api/instance';
-import { userLogin } from 'store/globalSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const isAuth = useSelector(({ global }: RootState) => global.isLogin);
+  const { isLogin: isAuth } = useSelector(({ global }: RootState) => global);
   const [toggle, setToggle] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,6 +31,8 @@ const Header = () => {
             instance.defaults.headers.common[
               'Authorization'
             ] = `Bearer ${data.accessToken}`;
+
+            dispatch(userInfoSet(data.userInfo));
             dispatch(userLogin());
           }
         } catch (e) {
@@ -50,9 +52,17 @@ const Header = () => {
       <S.HeaderMenuDiv>
         <S.HeaderMenuUl>
           {isAuth ? (
-            <Menu menus={AUTH_HEADER_MENU} element={S.HeaderMenuLi} />
+            <Menu
+              isAuth={isAuth}
+              menus={AUTH_HEADER_MENU}
+              element={S.HeaderMenuLi}
+            />
           ) : (
-            <Menu menus={UNAUTH_HEADER_MENU} element={S.HeaderMenuLi} />
+            <Menu
+              isAuth={isAuth}
+              menus={UNAUTH_HEADER_MENU}
+              element={S.HeaderMenuLi}
+            />
           )}
         </S.HeaderMenuUl>
       </S.HeaderMenuDiv>

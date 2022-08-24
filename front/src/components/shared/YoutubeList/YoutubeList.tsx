@@ -13,6 +13,7 @@ const YoutubeList = () => {
 
   const getVideos = useCallback(
     async (token?: string) => {
+      console.log('getVideos');
       const fetchedVideos: GetPopularVideosType | undefined =
         await getPopularVideos({ token });
 

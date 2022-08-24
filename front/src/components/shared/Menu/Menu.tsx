@@ -20,7 +20,7 @@ const Menu = ({ isAuth, menus, element: Component }: MenuProps) => {
 
   const doFunction = (link: string) => {
     if (!isAuth) open();
-    else navigate(link);
+    else navigate(link, { replace: true });
   };
 
   return (

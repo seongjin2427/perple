@@ -10,7 +10,7 @@ export const AUTH_HEADER_MENU = [
   {
     text: '로그아웃',
     name: 'logout',
-    link: '/',
+    link: 'http://www.naver.com',
   },
   {
     text: '마이페이지',

@@ -1,8 +1,9 @@
+import { IUserDocument } from '@/src/models/user';
 import jwt from 'jsonwebtoken';
 
-export const makeToken = (userId: string) => {
+export const makeToken = (userInfo: IUserDocument) => {
   try {
-    return jwt.sign({ userId }, 'perpleToken', {
+    return jwt.sign({ userInfo }, 'perpleToken', {
       expiresIn: '2h',
     });
   } catch (e) {
@@ -10,9 +11,9 @@ export const makeToken = (userId: string) => {
   }
 };
 
-export const makeRefreshToken = (userId: string) => {
+export const makeRefreshToken = (userInfo: IUserDocument) => {
   try {
-    return jwt.sign({ userId }, 'perpleToken', {
+    return jwt.sign({ userInfo }, 'perpleToken', {
       expiresIn: '14d',
     });
   } catch (e) {
