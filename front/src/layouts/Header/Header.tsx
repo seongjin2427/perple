@@ -1,17 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import SideMenu from 'layouts/SideMenu';
 import Menu from 'components/shared/Menu';
 import HamburgerButton from 'components/shared/HamburgerButton';
-import * as S from './Header.styled';
-import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
 import Modal from 'components/shared/Modal';
 import LoginComponent from 'components/LoginComponent';
+import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
+import * as S from './Header.styled';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { useDispatch } from 'react-redux';
+import instance from 'api/instance';
+import { userLogin } from 'store/globalSlice';
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const isAuth = useSelector(({ global }: RootState) => global.isLogin);
   const [toggle, setToggle] = useState<boolean>(false);
 
-  const isAuth = false;
+  useEffect(() => {
+    if (!isAuth) {
+      (async function () {
+        try {
+          const { data } = await instance.post(
+            '/auth/token',
+            {},
+            { withCredentials: true },
+          );
+          if (data.accessToken) {
+            instance.defaults.headers.common[
+              'Authorization'
+            ] = `Bearer ${data.accessToken}`;
+            dispatch(userLogin());
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
+  }, [dispatch, isAuth]);
 
   return (
     <S.Container>

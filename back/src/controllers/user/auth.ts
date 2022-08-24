@@ -1,6 +1,48 @@
-import { NextFunction, Request, Response } from 'express';
 import axios from 'axios';
-import { findUserBySnsId, saveUser } from '@/src/service/user';
+import { NextFunction, Request, Response } from 'express';
+
+import {
+  findUserBySnsId,
+  findUserByObjectId,
+  saveUser,
+} from '@/src/service/user';
+import { makeRefreshToken, makeToken, verifyToken } from '@/src/utils/jwt';
+
+interface RefreshTokenType {
+  userId: string;
+  iat: number;
+  exp: number;
+}
+
+export const getToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const clientRefreshToken = req.cookies['refresh_token'];
+  if (!clientRefreshToken) {
+    return res.json({});
+  }
+  try {
+    const { userId } = verifyToken(clientRefreshToken) as RefreshTokenType;
+
+    if (userId) {
+      const accessToken = makeToken(userId);
+      const refreshToken = makeRefreshToken(userId);
+
+      // const userInfo = await findUserByObjectId(userId);
+      // console.log('userInfo', userInfo);
+
+      res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+      });
+      return res.json({ accessToken });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json('오류 발생');
+  }
+};
 
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
 const GOOGLE_AUTH_TOKEN_URL = 'https://oauth2.googleapis.com/token';
@@ -12,7 +54,7 @@ export const getGoogleCode = async (
   next: NextFunction,
 ) => {
   console.log('getGoogleToken');
-  
+
   return res.redirect(
     `${GOOGLE_AUTH_URL}?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_AUTH_REDIRECT_URL}&response_type=code&include_granted_scopes=true&scope=https://www.googleapis.com/auth/userinfo.profile`,
   );
@@ -56,16 +98,20 @@ export const getGoogleToken = async (
       type: 'google',
       profileImage: picture,
     };
-
     // console.log(userInformation);
 
-    const isExist = await findUserBySnsId('google', sub);
-    if (isExist) {
-      return res.redirect(`http://localhost:3000/?signupId=이미_가입함`);
+    const userId = await findUserBySnsId('google', sub);
+    let refreshToken: string | undefined;
+
+    if (userId) {
+      refreshToken = makeRefreshToken(userId);
     } else {
       const signUpUserId = await saveUser(userInformation);
-      return res.redirect(`http://localhost:3000/?signupId=${signUpUserId}`);
+      refreshToken = makeRefreshToken(signUpUserId);
     }
+    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+
+    return res.status(200).redirect(`http://localhost:3000`);
   } catch (e) {
     console.log('에러다', e);
   }
