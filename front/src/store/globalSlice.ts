@@ -13,6 +13,7 @@ interface initialStateType {
   userInfo: UserInfoType;
   modal: boolean;
   sideMenu: boolean;
+  searchWord: string;
   isLogin: boolean;
 }
 
@@ -20,6 +21,7 @@ const initialState: initialStateType = {
   modal: false,
   isLogin: false,
   sideMenu: false,
+  searchWord: '',
   userInfo: {
     _id: '',
     email: '',
@@ -52,6 +54,9 @@ const globalSlice = createSlice({
     userInfoSet(state, action: PayloadAction<UserInfoType>) {
       state.userInfo = action.payload;
     },
+    getSearchWord(state, action: PayloadAction<string>) {
+      state.searchWord = action.payload;
+    },
   },
 });
 
@@ -62,6 +67,7 @@ export const {
   userLogin,
   userLogout,
   userInfoSet,
+  getSearchWord,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

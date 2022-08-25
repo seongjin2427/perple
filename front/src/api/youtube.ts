@@ -70,3 +70,23 @@ export const getPopularVideos = async ({
     console.log(e);
   }
 };
+
+interface getSearchVidiosParamsType {
+  searchWord: string;
+  urlPageToken?: string;
+}
+
+export const getSearchVideos = async ({
+  searchWord,
+}: getSearchVidiosParamsType) => {
+  // `https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.search.list?part=snippet,statistics,player&order=viewCount&q=${searchWord}&type=video&videoDefinition=high&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+  const { data } = await axios.get(
+    `https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=한국&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+    {
+      withCredentials: false,
+    },
+  );
+
+  console.log(data);
+  return data;
+};

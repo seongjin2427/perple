@@ -13,6 +13,7 @@ import instance from 'api/instance';
 import { toggleSideMenu, userInfoSet, userLogin } from 'store/globalSlice';
 import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
+import SearchForm from 'components/shared/SearchForm';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -48,8 +49,7 @@ const Header = () => {
     <S.Container>
       <S.LogoDiv />
       <S.SearchDiv>
-        <S.SearchInput />
-        <S.SearchButton>검색</S.SearchButton>
+        <SearchForm />
       </S.SearchDiv>
       <S.HeaderMenuDiv isAuth={isAuth}>
         <S.HeaderMenuUl>
