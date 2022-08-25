@@ -1,17 +1,30 @@
-export const UNAUTH_HEADER_MENU = [
+import instance from 'api/instance';
+
+export const LOGIN_MENU = [
   {
     text: '로그인',
     name: 'login',
-    link: '/',
+    show: false,
+    onClick: async () => {},
+  },
+  {
+    text: '로그아웃',
+    name: 'logout',
+    show: true,
+    onClick: async () => {
+      const res = await instance.post(
+        '/auth/logout',
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(res);
+    },
   },
 ];
 
 export const AUTH_HEADER_MENU = [
-  {
-    text: '로그아웃',
-    name: 'logout',
-    link: 'http://www.naver.com',
-  },
   {
     text: '마이페이지',
     name: 'myPage',

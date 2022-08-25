@@ -30,7 +30,7 @@ export const LogoDiv = styled.div`
 `;
 
 export const SearchDiv = styled.div`
-  flex: 3;
+  width: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,26 +38,27 @@ export const SearchDiv = styled.div`
 
   ${({ theme }) => css`
     ${theme.media.desktop} {
-      justify-content: flex-end;
-      flex: 5;
+      justify-content: center;
     }
   `}
 `;
 
 export const SearchInput = styled.input`
-  width: 70%;
+  width: 100%;
   height: 2.5rem;
-  font-size: 1rem;
   padding: 0 0.75rem;
-  color: ${({ theme }) => theme.colors.primary.hex};
+
   border: 2px solid ${({ theme }) => theme.colors.secondary.hex};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.primary.hex};
+
   :focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary.hex};
   }
 `;
 
 export const SearchButton = styled.button`
-  width: 3rem;
+  width: 5rem;
   height: 2.75rem;
   background: ${({ theme }) => theme.colors.secondary.hex};
   color: white;
@@ -72,14 +73,21 @@ export const SearchButton = styled.button`
   }
 `;
 
-export const HeaderMenuDiv = styled.div`
+interface HeaderMenuDivType {
+  isAuth: boolean;
+}
+
+export const HeaderMenuDiv = styled.div<HeaderMenuDivType>`
   display: none;
-  flex: 3;
+  width: 22.5rem;
+
+  ${({isAuth}) => !isAuth && css`
+    width: 10rem;
+  `}
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
       display: flex;
-      align-items: center;
       justify-content: center;
     }
   `}
@@ -87,12 +95,14 @@ export const HeaderMenuDiv = styled.div`
 
 export const HeaderMenuUl = styled.ul`
   display: flex;
+  align-items: center;
 `;
 
 export const HeaderMenuLi = styled.li`
   color: ${({ theme }) => theme.colors.primary.hex};
-  margin: 0 1vw;
+  margin: 0 1rem;
   cursor: pointer;
+
   :hover {
     font-weight: bold;
   }

@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 
-import {
-  findUserBySnsId,
-  saveUser,
-} from '@/src/service/user';
+import { findUserBySnsId, saveUser } from '@/src/service/user';
 import { makeRefreshToken, makeToken, verifyToken } from '@/src/utils/jwt';
 import { IUserDocument } from '@/src/models/user';
 
@@ -19,7 +16,7 @@ export const getToken = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const clientRefreshToken = req.cookies['refresh_token'];
+  const clientRefreshToken = req.cookies['refreshToken'];
   if (!clientRefreshToken) {
     return res.json({});
   }
@@ -30,10 +27,11 @@ export const getToken = async (
       const accessToken = makeToken(userInfo);
       const refreshToken = makeRefreshToken(userInfo);
 
-
-      res.cookie('refresh_token', refreshToken, {
+      res.cookie('refreshToken', refreshToken, {
+        maxAge: 60 * 60 * 24 * 2 * 10000,
         httpOnly: true,
       });
+
       return res.json({ accessToken, userInfo });
     }
   } catch (e) {
@@ -109,10 +107,25 @@ export const getGoogleToken = async (
         refreshToken = makeRefreshToken(signUpUser);
       }
     }
-    res.cookie('refresh_token', refreshToken, { httpOnly: true });
 
-    return res.status(200).redirect(`http://localhost:3000`);
+    res.cookie('refreshToken', refreshToken, {
+      maxAge: 60 * 60 * 24 * 2 * 10000,
+      httpOnly: true,
+    });
+
+    return res.redirect(302, 'http://localhost:3000');
   } catch (e) {
     console.log('에러다', e);
   }
+};
+
+export const userLogout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  console.log('userLogout');
+  res.clearCookie('refreshToken');
+
+  return res.status(200).json({ message: 'Logout!' });
 };

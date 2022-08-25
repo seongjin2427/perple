@@ -12,12 +12,14 @@ interface UserInfoType {
 interface initialStateType {
   userInfo: UserInfoType;
   modal: boolean;
+  sideMenu: boolean;
   isLogin: boolean;
 }
 
 const initialState: initialStateType = {
   modal: false,
   isLogin: false,
+  sideMenu: false,
   userInfo: {
     _id: '',
     email: '',
@@ -38,6 +40,9 @@ const globalSlice = createSlice({
     closeModal(state) {
       state.modal = false;
     },
+    toggleSideMenu(state, action: PayloadAction<boolean>) {
+      state.sideMenu = action.payload;
+    },
     userLogin(state) {
       state.isLogin = true;
     },
@@ -50,7 +55,13 @@ const globalSlice = createSlice({
   },
 });
 
-export const { openModal, closeModal, userLogin, userLogout, userInfoSet } =
-  globalSlice.actions;
+export const {
+  openModal,
+  closeModal,
+  toggleSideMenu,
+  userLogin,
+  userLogout,
+  userInfoSet,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

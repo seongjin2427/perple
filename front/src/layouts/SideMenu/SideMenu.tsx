@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 
 import Menu from 'components/shared/Menu';
 import { RootState } from 'store/store';
-import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
+import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './SideMenu.styled';
+import LoginMenu from 'components/shared/LoginMenu';
 
 interface SideMenuProps {
   active: boolean;
@@ -18,19 +19,12 @@ const SideMenu = ({ active }: SideMenuProps) => {
   return (
     <S.Container active={active}>
       <S.SideMenuUl>
-        {isAuth ? (
-          <>
-            <S.UserDiv>{userInfo.nickname}님 어서오세요 😄</S.UserDiv>
-            <Menu
-              isAuth={isAuth}
-              menus={AUTH_HEADER_MENU}
-              element={S.SideMenuLi}
-            />
-          </>
-        ) : (
+        {isAuth && <S.UserDiv>{userInfo.nickname}님 어서오세요 😄</S.UserDiv>}
+        <LoginMenu isAuth={isAuth} menus={LOGIN_MENU} element={S.SideMenuLi} />
+        {isAuth && (
           <Menu
             isAuth={isAuth}
-            menus={UNAUTH_HEADER_MENU}
+            menus={AUTH_HEADER_MENU}
             element={S.SideMenuLi}
           />
         )}
