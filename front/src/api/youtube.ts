@@ -1,5 +1,4 @@
-import instance from './instance';
-
+import axios from 'axios';
 interface ThumbnailType {
   width: number;
   height: number;
@@ -53,14 +52,19 @@ interface getPopularVideosParamsType {
   token: string | undefined;
 }
 
-export const getPopularVideos = async ({token}: getPopularVideosParamsType) => {
+export const getPopularVideos = async ({
+  token,
+}: getPopularVideosParamsType) => {
   const urlPageToken = token || '';
 
   try {
-    const { data } = await instance.get<GetPopularVideosType>(
+    const { data } = await axios.get<GetPopularVideosType>(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,player&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      {
+        withCredentials: false,
+      },
     );
-    console.log(data)
+    console.log(data);
     return data;
   } catch (e) {
     console.log(e);

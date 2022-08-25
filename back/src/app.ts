@@ -1,19 +1,23 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 import 'module-alias/register';
 
-import cors from './utils/cors';
 import Routes from './routes/index';
 
 const app: express.Application = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}))
 dotenv.config();
-
-app.use(cors);
 
 app.use(Routes);
 

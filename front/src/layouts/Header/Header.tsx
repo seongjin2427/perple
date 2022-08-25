@@ -1,17 +1,48 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { RootState } from 'store/store';
 import SideMenu from 'layouts/SideMenu';
-import Menu from 'components/shared/Menu';
 import HamburgerButton from 'components/shared/HamburgerButton';
-import * as S from './Header.styled';
-import { AUTH_HEADER_MENU, UNAUTH_HEADER_MENU } from 'constants/menu';
 import Modal from 'components/shared/Modal';
 import LoginComponent from 'components/LoginComponent';
+import Menu from 'components/shared/Menu';
+import LoginMenu from 'components/shared/LoginMenu';
+
+import instance from 'api/instance';
+import { toggleSideMenu, userInfoSet, userLogin } from 'store/globalSlice';
+import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
+import * as S from './Header.styled';
 
 const Header = () => {
-  const [toggle, setToggle] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { isLogin: isAuth, sideMenu } = useSelector(
+    ({ global }: RootState) => global,
+  );
 
-  const isAuth = false;
+  const loginFunction = useCallback(async () => {
+    if (!isAuth) {
+      try {
+        const { data } = await instance.post(
+          'http://localhost:8080/auth/token',
+          {},
+          { withCredentials: true },
+        );
+
+        if (data.accessToken) {
+          localStorage.setItem('Authorization', data.accessToken);
+          dispatch(userInfoSet(data.userInfo));
+          dispatch(userLogin());
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [dispatch, isAuth]);
+
+  useEffect(() => {
+    loginFunction();
+  }, [loginFunction]);
 
   return (
     <S.Container>
@@ -20,19 +51,26 @@ const Header = () => {
         <S.SearchInput />
         <S.SearchButton>검색</S.SearchButton>
       </S.SearchDiv>
-      <S.HeaderMenuDiv>
+      <S.HeaderMenuDiv isAuth={isAuth}>
         <S.HeaderMenuUl>
-          {isAuth ? (
-            <Menu menus={AUTH_HEADER_MENU} element={S.HeaderMenuLi} />
-          ) : (
-            <Menu menus={UNAUTH_HEADER_MENU} element={S.HeaderMenuLi} />
+          <LoginMenu
+            isAuth={isAuth}
+            menus={LOGIN_MENU}
+            element={S.HeaderMenuLi}
+          />
+          {isAuth && (
+            <Menu
+              isAuth={isAuth}
+              menus={AUTH_HEADER_MENU}
+              element={S.HeaderMenuLi}
+            />
           )}
         </S.HeaderMenuUl>
       </S.HeaderMenuDiv>
-      <S.MenuButton onClick={() => setToggle(!toggle)}>
-        <HamburgerButton width={50} toggle={toggle} />
+      <S.MenuButton onClick={() => dispatch(toggleSideMenu(!sideMenu))}>
+        <HamburgerButton width={50} toggle={sideMenu} />
       </S.MenuButton>
-      <SideMenu active={toggle} />
+      <SideMenu active={sideMenu} />
       <Modal title="로그인" element={<LoginComponent />} />
     </S.Container>
   );

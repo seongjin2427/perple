@@ -1,11 +1,25 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_YOUTUBE_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 
-instance.interceptors.request.use((config) => {});
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('Authorization');
+    if (config.headers) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (err) => {
+    console.log(err);
+    return Promise.reject(err);
+  },
+);
 
-instance.interceptors.response.use((config) => {});
+instance.interceptors.response.use((config) => {
+  return config;
+});
 
-export default axios;
+export default instance;
