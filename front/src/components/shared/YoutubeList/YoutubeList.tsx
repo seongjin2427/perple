@@ -1,11 +1,20 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
 import Pagination from 'components/shared/Pagination';
 import VideoStatistics from 'components/shared/VideoStatistics';
-import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
 import * as S from './YoutubeList.styled';
 
 const YoutubeList = () => {
+  const { search } = useParams();
+
+  console.log(search);
+
+  const [title, setTitle] = useState<string | undefined>(
+    search || '인기 동영상',
+  );
+
   const [videos, setVideos] = useState<GetPopularVideosType | undefined>();
   const [statistics, setStatistics] = useState<
     GetPopularVideosType | undefined
@@ -31,7 +40,7 @@ const YoutubeList = () => {
 
   return (
     <S.Container>
-      <S.Title>인기 동영상</S.Title>
+      <S.Title>{'검색단어 : ' + title}</S.Title>
       <S.VideoListDiv>
         {videos?.items.map((item, idx) => (
           <Fragment key={item.id}>
