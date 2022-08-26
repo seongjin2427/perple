@@ -15,6 +15,7 @@ import instance from 'api/instance';
 import { toggleSideMenu, userInfoSet, userLogin } from 'store/globalSlice';
 import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
+import useSecondModal from 'hooks/useSecondModal';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -47,8 +48,14 @@ const Header = () => {
     loginFunction();
   }, [loginFunction]);
 
+  const [, actions, SecondModal] = useSecondModal({
+    title: '로그인',
+    component: () => <LoginComponent />,
+  });
+
   return (
     <S.Container>
+      <SecondModal />
       <S.LogoDiv onClick={() => navigate('/')} />
       <S.SearchDiv>
         <SearchForm />
@@ -73,7 +80,6 @@ const Header = () => {
         <HamburgerButton width={50} toggle={sideMenu} />
       </S.MenuButton>
       <SideMenu active={sideMenu} />
-      <Modal title="로그인" element={<LoginComponent />} />
     </S.Container>
   );
 };
