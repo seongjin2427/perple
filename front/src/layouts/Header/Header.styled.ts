@@ -18,6 +18,7 @@ export const LogoDiv = styled.div`
   background: url(${require('../../assets/only_logo.png')}) center center
     no-repeat;
   background-size: contain;
+  cursor: pointer;
 
   ${({ theme }) => css`
     ${theme.media.tablet} {

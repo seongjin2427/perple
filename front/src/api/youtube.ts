@@ -5,41 +5,34 @@ interface ThumbnailType {
   url: string;
 }
 
-export interface GetPopularVideosType {
-  items: {
-    id: string;
+interface SnippetType {
+  categoryId: string;
+  channelId: string;
+  channelTitle: string;
+  description: string;
+  liveBroadcastContent: string;
+  localized: {
+    description: string;
     title: string;
-    etag: string;
-    kind: string;
-    player: {
-      embedHhtml: string;
-    };
-    snippet: {
-      categoryId: string;
-      channelId: string;
-      channelTitle: string;
-      defaultAudioLanguage: string;
-      description: string;
-      liveBroadcastContent: string;
-      localized: {
-        description: string;
-        title: string;
-      };
-      publishedAt: string;
-      thumbnails: {
-        default: ThumbnailType;
-        high: ThumbnailType;
-        medium: ThumbnailType;
-      };
-      tags: string[];
-    };
-    statistics: {
-      commentCount: string;
-      favoriteCount: string;
-      likeCount: string;
-      viewCount: string;
-    };
-  }[];
+  };
+  title: string;
+  publishedAt: string;
+  thumbnails: {
+    default: ThumbnailType;
+    high: ThumbnailType;
+    medium: ThumbnailType;
+  };
+  tags: string[];
+}
+
+interface StatisticsType {
+  commentCount: string;
+  favoriteCount: string;
+  likeCount: string;
+  viewCount: string;
+}
+
+interface DefaultYoutubeType {
   prevPageToken: string;
   nextPageToken: string;
   pageInfo: {
@@ -47,6 +40,44 @@ export interface GetPopularVideosType {
     totalResults: number;
   };
 }
+
+interface PopularVideosType {
+  items: {
+    id: string;
+    title: string;
+    etag: string;
+    kind: string;
+    snippet: SnippetType;
+    statistics: StatisticsType;
+  }[];
+}
+
+interface SearchedVideosType {
+  items: {
+    id: {
+      kind: string;
+      videoId: string;
+    };
+    title: string;
+    etag: string;
+    kind: string;
+    snippet: Omit<SnippetType, 'categoryId' | 'localized' | 'tags'>;
+    statistics: StatisticsType;
+  }[];
+}
+
+export interface getSearchVideosStatisticsType {
+  items: {
+    id: string;
+    title: string;
+    etag: string;
+    kind: string;
+    statistics: StatisticsType;
+  }[];
+}
+
+export type GetPopularVideosType = DefaultYoutubeType & PopularVideosType;
+export type GetSearchVideosType = DefaultYoutubeType & SearchedVideosType;
 
 interface getPopularVideosParamsType {
   token: string | undefined;
@@ -59,7 +90,7 @@ export const getPopularVideos = async ({
 
   try {
     const { data } = await axios.get<GetPopularVideosType>(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,player&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
       {
         withCredentials: false,
       },
@@ -71,22 +102,33 @@ export const getPopularVideos = async ({
   }
 };
 
-interface getSearchVidiosParamsType {
+interface getSearchVideosParamsType {
   searchWord: string;
-  urlPageToken?: string;
+  token?: string;
 }
 
 export const getSearchVideos = async ({
   searchWord,
-}: getSearchVidiosParamsType) => {
-  // `https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.search.list?part=snippet,statistics,player&order=viewCount&q=${searchWord}&type=video&videoDefinition=high&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-  const { data } = await axios.get(
-    `https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=한국&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+  token,
+}: getSearchVideosParamsType) => {
+  const urlPageToken = token || '';
+  const searchResponse = await axios.get<GetSearchVideosType>(
+    `https://www.googleapis.com/youtube/v3/search?&videoEmbeddable=true&type=video&part=snippet&pageToken=${urlPageToken}&q=${searchWord}&order=relevance&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
     {
       withCredentials: false,
     },
   );
 
-  console.log(data);
-  return data;
+  const searchIds = searchResponse.data.items
+    .map((item) => item.id.videoId)
+    .join(',');
+
+  const statisticsResponse = await axios.get<getSearchVideosStatisticsType>(
+    `https://www.googleapis.com/youtube/v3/videos?id=${searchIds}&part=statistics&pageToken=${urlPageToken}&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+  );
+
+  return {
+    searchedVideos: searchResponse.data,
+    searchedStatistics: statisticsResponse.data,
+  };
 };
