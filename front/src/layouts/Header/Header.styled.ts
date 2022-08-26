@@ -40,7 +40,7 @@ interface HeaderMenuDivType {
 
 export const HeaderMenuDiv = styled.div<HeaderMenuDivType>`
   display: none;
-  width: 22.5rem;
+  width: 25rem;
 
   ${({ isAuth }) =>
     !isAuth &&

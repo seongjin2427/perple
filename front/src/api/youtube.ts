@@ -124,7 +124,7 @@ export const getSearchVideos = async ({
     .join(',');
 
   const statisticsResponse = await axios.get<getSearchVideosStatisticsType>(
-    `https://www.googleapis.com/youtube/v3/videos?id=${searchIds}&part=statistics&pageToken=${urlPageToken}&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+    `https://www.googleapis.com/youtube/v3/videos?id=${searchIds}&part=statistics&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
   );
 
   return {
