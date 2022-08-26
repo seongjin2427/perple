@@ -6,6 +6,7 @@ import Main from 'pages/Main';
 import Page404 from 'pages/404';
 import GlobalStyle from 'styles/global';
 import { store } from 'store/store';
+import SearchPage from 'pages/SearchPage';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Main />} />
+            <Route path="/search/:search" element={<SearchPage />} />
             <Route path="/error" element={<Page404 />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

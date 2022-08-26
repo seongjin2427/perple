@@ -1,31 +1,39 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
+import {
+  getSearchVideos,
+  getSearchVideosStatisticsType,
+  GetSearchVideosType,
+} from 'api/youtube';
 import Pagination from 'components/shared/Pagination';
 import VideoStatistics from 'components/shared/VideoStatistics';
-import * as S from './YoutubeList.styled';
+import * as S from './SearchedYoutube.styled';
 
 interface YoutubeListProps {
   title: string;
 }
 
 const YoutubeList = ({ title }: YoutubeListProps) => {
-  const [videos, setVideos] = useState<GetPopularVideosType | undefined>();
+  const { search } = useParams();
+  const [videos, setVideos] = useState<GetSearchVideosType | undefined>();
   const [statistics, setStatistics] = useState<
-    GetPopularVideosType | undefined
+    getSearchVideosStatisticsType | undefined
   >();
 
   const getVideos = useCallback(
     async (token?: string) => {
-      const fetchedVideos: GetPopularVideosType | undefined =
-        await getPopularVideos({ token });
+      const { searchedVideos, searchedStatistics } = await getSearchVideos({
+        token,
+        searchWord: search || '',
+      });
 
-      setVideos(fetchedVideos);
-      setStatistics(fetchedVideos);
+      setVideos(searchedVideos);
+      setStatistics(searchedStatistics);
 
       window.scrollTo({ top: 0 });
     },
-    [setVideos],
+    [setVideos, search],
   );
 
   useEffect(() => {
@@ -34,7 +42,7 @@ const YoutubeList = ({ title }: YoutubeListProps) => {
 
   return (
     <S.Container>
-      <S.Title>인기 동영상</S.Title>
+      <S.Title>{`검색 단어 : ${title}`}</S.Title>
       <S.VideoListDiv>
         {videos?.items.map((item, idx) => (
           <Fragment key={item.etag}>
@@ -42,23 +50,22 @@ const YoutubeList = ({ title }: YoutubeListProps) => {
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"
-                  src={`//www.youtube.com/embed/${item.id}`}
+                  src={`//www.youtube.com/embed/${item.id.videoId}`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
-                {statistics && statistics?.items[idx].id === item.id && (
-                  <VideoStatistics
-                    statistics={statistics?.items[idx].statistics}
-                  />
-                )}
+                {statistics &&
+                  statistics?.items[idx].id === item.id.videoId && (
+                    <VideoStatistics
+                      statistics={statistics?.items[idx].statistics}
+                    />
+                  )}
               </S.VideoThumbnailDiv>
               <S.VideoTextArea>
-                <S.VideoTitle>
-                  {item.snippet.localized.title || item.snippet.title}
-                </S.VideoTitle>
+                <S.VideoTitle>{item.snippet.title || ''}</S.VideoTitle>
                 <S.VideoChannelTitle>
-                  {item.snippet.channelTitle}
+                  {item.snippet.channelTitle || ''}
                 </S.VideoChannelTitle>
               </S.VideoTextArea>
             </S.VideoWrapper>

@@ -1,20 +1,20 @@
 import React from 'react';
-
-import MainLayout from 'layouts/MainLayout';
-import YoutubeList from 'components/shared/YoutubeList';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store/store';
 import { useParams } from 'react-router-dom';
 
-const Main = () => {
+import { RootState } from 'store/store';
+import MainLayout from 'layouts/MainLayout';
+import SearchedYoutube from 'components/shared/SearchedYoutube';
+
+const SearchPage = () => {
   const title = useSelector(({ global }: RootState) => global.searchWord);
   const { search } = useParams();
 
   return (
     <MainLayout>
-      <YoutubeList title={title || search || ''} />
+      <SearchedYoutube title={title || search || '없음'} />
     </MainLayout>
   );
 };
 
-export default Main;
+export default SearchPage;

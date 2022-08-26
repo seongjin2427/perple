@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { RootState } from 'store/store';
+import SearchForm from 'components/shared/SearchForm';
 import SideMenu from 'layouts/SideMenu';
 import HamburgerButton from 'components/shared/HamburgerButton';
 import Modal from 'components/shared/Modal';
@@ -15,6 +17,7 @@ import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
 
 const Header = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLogin: isAuth, sideMenu } = useSelector(
     ({ global }: RootState) => global,
@@ -46,10 +49,9 @@ const Header = () => {
 
   return (
     <S.Container>
-      <S.LogoDiv />
+      <S.LogoDiv onClick={() => navigate('/')} />
       <S.SearchDiv>
-        <S.SearchInput />
-        <S.SearchButton>검색</S.SearchButton>
+        <SearchForm />
       </S.SearchDiv>
       <S.HeaderMenuDiv isAuth={isAuth}>
         <S.HeaderMenuUl>
