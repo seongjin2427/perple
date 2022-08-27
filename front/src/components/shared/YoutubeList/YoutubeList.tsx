@@ -4,7 +4,7 @@ import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
 import Pagination from 'components/shared/Pagination';
 import VideoStatistics from 'components/shared/VideoStatistics';
 import * as S from './YoutubeList.styled';
-import useModal from 'hooks/useModal';
+import useModal, { IntegratedVideosType } from 'hooks/useModal';
 import SelectBookmark from 'components/shared/SelectBookmark';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
@@ -33,25 +33,25 @@ const YoutubeList = () => {
     getVideos();
   }, [getVideos]);
 
-  const [, { open }, Modal] = useModal({ title: '북마크 추가' });
+  const [, { open }, Modal, videoInfo] = useModal({ title: '북마크 추가' });
 
-  const openModal = (e: MouseEvent, text: string) => {
+  const openModal = (e: MouseEvent, item: IntegratedVideosType) => {
     e.stopPropagation();
-    if (isAuth) open(text);
+    if (isAuth) {
+      open({ sTitle: item.snippet.title, item });
+    }
   };
 
   return (
     <S.Container>
       <Modal>
-        <SelectBookmark />
+        <SelectBookmark item={videoInfo} />
       </Modal>
       <S.Title>인기 동영상</S.Title>
       <S.VideoListDiv>
         {videos?.items.map((item, idx) => (
           <Fragment key={item.etag}>
-            <S.VideoWrapper
-              onClick={(e) => openModal(e, item.snippet.localized.title)}
-            >
+            <S.VideoWrapper onClick={(e) => openModal(e, item)}>
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"

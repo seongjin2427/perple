@@ -2,11 +2,32 @@ import React from 'react';
 
 import useBookmark from 'hooks/useBookmark';
 import * as S from './SelectBookmark.styled';
+import { IntegratedVideosType } from 'hooks/useModal';
+import { PopularVideoItemsType, SearchedVideosItemType } from 'api/youtube';
 
-const SelectBookmark = () => {
+interface SelectBookmarkProps {
+  item: IntegratedVideosType | undefined;
+}
+
+const SelectBookmark = ({ item }: SelectBookmarkProps) => {
   const [bookmark, actions] = useBookmark();
 
-  console.log(bookmark);
+  const onClickAddBookmark = () => {
+    if (item) {
+      const videoId =
+        (item as SearchedVideosItemType).id.videoId ||
+        (item as PopularVideoItemsType).id;
+      const title =
+        (item as PopularVideoItemsType).snippet.localized.title ||
+        (item as SearchedVideosItemType).snippet.title;
+      const channelName = item.snippet.channelTitle;
+      const description = item.snippet.description
+
+
+
+      actions.onClickConfirmAddBookmark(videoId);
+    }
+  };
 
   return (
     <S.Container>
@@ -27,7 +48,7 @@ const SelectBookmark = () => {
           <S.AddBookmarkDiv>+ 폴더 추가</S.AddBookmarkDiv>
         )}
       </S.BookmarkWrapper>
-      <S.ConfirmButton>확인</S.ConfirmButton>
+      <S.ConfirmButton onClick={onClickAddBookmark}>확인</S.ConfirmButton>
     </S.Container>
   );
 };

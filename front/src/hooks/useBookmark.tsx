@@ -21,12 +21,12 @@ export type BookmarkType = {
 
 interface UseBookmarkActionType {
   onChangeBookmarkCheck: (idx: number) => void;
-  onClickConfirmAddBookmark: () => void;
+  onClickConfirmAddBookmark: (videoId: string) => void;
 }
 
 const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
-  // const [bookmarkList, setBookmarkList] = useState<BookmarkType>(dummyBookmark);
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType>(dummyBookmark);
+  // const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
   const [addBookmarkList, setAddBookmarkList] = useState<string[]>([]);
 
   // useEffect(() => {
@@ -42,8 +42,9 @@ const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
         );
       else setAddBookmarkList((prev) => [bookmarkId, ...prev]);
     },
-    onClickConfirmAddBookmark: function () {
+    onClickConfirmAddBookmark: async function (videoId: string) {
       console.log('addBookmarkList', addBookmarkList);
+      console.log(videoId);
     },
   };
 

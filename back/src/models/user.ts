@@ -33,6 +33,18 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    bookmarks: {
+      bookmark: [
+        {
+          bookmarkId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Bookmark',
+            required: true,
+          },
+          count: { type: Number, required: true },
+        },
+      ],
+    },
   },
   {
     timestamps: {

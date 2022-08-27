@@ -1,8 +1,17 @@
+import { PopularVideoItemsType, SearchedVideosItemType } from 'api/youtube';
 import Modal from 'components/shared/Modal';
 import { ReactNode, useState } from 'react';
 
+export type IntegratedVideosType =
+  | PopularVideoItemsType
+  | SearchedVideosItemType;
+
+interface ModalParamsProps {
+  title?: string;
+  component?: ReturnComponentType;
+}
 export interface ModalActionsType {
-  open: (sTitle?: string) => void;
+  open: ({ sTitle, item }: OpenModalParamsType) => void;
   close: () => void;
 }
 
@@ -10,11 +19,10 @@ export type ReturnComponentType = ({
   children,
 }: ReturnModalProps) => JSX.Element;
 
-interface ModalProps {
-  title: string;
-  component?: ReturnComponentType;
+interface OpenModalParamsType {
+  sTitle?: string;
+  item?: IntegratedVideosType;
 }
-
 interface ReturnModalProps {
   children?: ReactNode;
 }
@@ -22,14 +30,21 @@ interface ReturnModalProps {
 const useModal = ({
   title,
   component,
-}: ModalProps): [boolean, ModalActionsType, ReturnComponentType] => {
+}: ModalParamsProps): [
+  boolean,
+  ModalActionsType,
+  ReturnComponentType,
+  IntegratedVideosType?,
+] => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [subTitle, setSubTitle] = useState<string>('');
+  const [videoInfo, setVideoInfo] = useState<IntegratedVideosType>();
 
   const actions: ModalActionsType = {
-    open: function (sTitle?: string) {
+    open: function ({ sTitle, item }: OpenModalParamsType) {
       setToggle(true);
       if (sTitle) setSubTitle(sTitle);
+      if (item) setVideoInfo(item);
     },
     close: function () {
       setToggle(false);
@@ -50,6 +65,7 @@ const useModal = ({
         {children}
       </Modal>
     ),
+    videoInfo,
   ];
 };
 

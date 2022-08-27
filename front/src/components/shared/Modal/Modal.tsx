@@ -17,7 +17,7 @@ interface ModalProps {
 
 interface SecondModalProps {
   active: boolean;
-  title: string;
+  title?: string;
   subTitle?: string;
   actions: ModalActionsType;
   children?: ReactNode;

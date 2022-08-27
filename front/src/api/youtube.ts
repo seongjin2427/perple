@@ -41,29 +41,31 @@ interface DefaultYoutubeType {
   };
 }
 
+export interface PopularVideoItemsType {
+  id: string;
+  title: string;
+  etag: string;
+  kind: string;
+  snippet: SnippetType;
+  statistics: StatisticsType;
+}
 interface PopularVideosType {
-  items: {
-    id: string;
-    title: string;
-    etag: string;
-    kind: string;
-    snippet: SnippetType;
-    statistics: StatisticsType;
-  }[];
+  items: PopularVideoItemsType[];
 }
 
-interface SearchedVideosType {
-  items: {
-    id: {
-      kind: string;
-      videoId: string;
-    };
-    title: string;
-    etag: string;
+export interface SearchedVideosItemType {
+  id: {
     kind: string;
-    snippet: Omit<SnippetType, 'categoryId' | 'localized' | 'tags'>;
-    statistics: StatisticsType;
-  }[];
+    videoId: string;
+  };
+  title: string;
+  etag: string;
+  kind: string;
+  snippet: Omit<SnippetType, 'categoryId' | 'localized' | 'tags'>;
+  statistics: StatisticsType;
+}
+interface SearchedVideosType {
+  items: SearchedVideosItemType[];
 }
 
 export interface getSearchVideosStatisticsType {
@@ -119,6 +121,7 @@ export const getSearchVideos = async ({
     },
   );
 
+  console.log(searchResponse)
   const searchIds = searchResponse.data.items
     .map((item) => item.id.videoId)
     .join(',');

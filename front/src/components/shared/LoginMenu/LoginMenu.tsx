@@ -26,7 +26,7 @@ const LoginMenu = ({
   const doFunction = () => {
     if (isAuth) logout();
     else {
-      actions.open();
+      actions.open({});
       login();
     }
   };
