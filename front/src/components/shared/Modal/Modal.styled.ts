@@ -32,11 +32,31 @@ export const ModalContentWrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   animation: ${SLIDE_DOWN} 0.5s ease-in-out forwards;
+  z-index: 7000;
 `;
 
 export const Title = styled.h1`
   font-size: 1.75rem;
   color: ${({ theme }) => theme.colors.primary.hex};
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: bold;
+`;
+
+export const SubTitle = styled.h2`
+  width: 100%;
+  display: -webkit-box;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  ${({ theme }) => css`
+    color: ${theme.colors.primary.hex};
+    font-size: 1rem;
+    line-height: 1.25;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    ${theme.media.tablet} {
+      -webkit-line-clamp: 1;
+    }
+  `}
 `;

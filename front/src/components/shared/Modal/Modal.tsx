@@ -1,6 +1,13 @@
-import { ComponentProps, HTMLAttributes, ReactNode } from 'react';
+import {
+  ComponentProps,
+  HTMLAttributes,
+  MouseEvent,
+  ReactNode,
+  useCallback,
+} from 'react';
 import reactDom from 'react-dom';
-import { ReturnComponentType, SecondModalActionsType } from 'hooks/useModal';
+
+import { ReturnComponentType, ModalActionsType } from 'hooks/useModal';
 import * as S from './Modal.styled';
 
 interface ModalProps {
@@ -11,7 +18,8 @@ interface ModalProps {
 interface SecondModalProps {
   active: boolean;
   title: string;
-  actions: SecondModalActionsType;
+  subTitle?: string;
+  actions: ModalActionsType;
   children?: ReactNode;
   component?: ReturnComponentType;
 }
@@ -20,6 +28,7 @@ const SecondModal = ({
   active,
   title,
   actions,
+  subTitle,
   children,
   component: Component,
 }: SecondModalProps) => {
@@ -29,6 +38,7 @@ const SecondModal = ({
     <Background toggle={active} onClick={actions.close}>
       <Wrapper>
         <Title>{title}</Title>
+        <SubTitle>{subTitle}</SubTitle>
         {children}
         {Component && <Component>{children}</Component>}
       </Wrapper>
@@ -55,8 +65,17 @@ const Title = ({ children }: Omit<ModalProps, 'toggle'>) => {
   return <S.Title>{children}</S.Title>;
 };
 
+const SubTitle = ({ children }: Omit<ModalProps, 'toggle'>) => {
+  return <S.SubTitle>{children}</S.SubTitle>;
+};
+
 const Wrapper = ({ children }: Omit<ModalProps, 'toggle'>) => {
-  return <S.ModalContentWrapper>{children}</S.ModalContentWrapper>;
+  const test = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+  return (
+    <S.ModalContentWrapper onClick={test}>{children}</S.ModalContentWrapper>
+  );
 };
 
 export default SecondModal;

@@ -1,37 +1,35 @@
-import SecondModal from 'components/shared/Modal';
+import Modal from 'components/shared/Modal';
 import { ReactNode, useState } from 'react';
 
-export interface SecondModalActionsType {
-  open: () => void;
+export interface ModalActionsType {
+  open: (sTitle?: string) => void;
   close: () => void;
 }
 
 export type ReturnComponentType = ({
   children,
-}: ReturnSecondModalProps) => JSX.Element;
+}: ReturnModalProps) => JSX.Element;
 
-interface SecondModalProps {
+interface ModalProps {
   title: string;
   component?: ReturnComponentType;
 }
 
-interface ReturnSecondModalProps {
+interface ReturnModalProps {
   children?: ReactNode;
 }
 
 const useModal = ({
   title,
   component,
-}: SecondModalProps): [
-  boolean,
-  SecondModalActionsType,
-  ReturnComponentType,
-] => {
+}: ModalProps): [boolean, ModalActionsType, ReturnComponentType] => {
   const [toggle, setToggle] = useState<boolean>(false);
+  const [subTitle, setSubTitle] = useState<string>('');
 
-  const actions: SecondModalActionsType = {
-    open: function () {
+  const actions: ModalActionsType = {
+    open: function (sTitle?: string) {
       setToggle(true);
+      if (sTitle) setSubTitle(sTitle);
     },
     close: function () {
       setToggle(false);
@@ -42,14 +40,15 @@ const useModal = ({
     toggle,
     actions,
     ({ children }) => (
-      <SecondModal
+      <Modal
         active={toggle}
         actions={actions}
         title={title}
+        subTitle={subTitle}
         component={component}
       >
         {children}
-      </SecondModal>
+      </Modal>
     ),
   ];
 };

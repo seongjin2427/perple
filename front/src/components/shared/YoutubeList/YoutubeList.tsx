@@ -1,15 +1,16 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, MouseEvent, useCallback, useEffect, useState } from 'react';
 
 import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
 import Pagination from 'components/shared/Pagination';
 import VideoStatistics from 'components/shared/VideoStatistics';
 import * as S from './YoutubeList.styled';
+import useModal from 'hooks/useModal';
+import SelectBookmark from 'components/shared/SelectBookmark';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
-interface YoutubeListProps {
-  title: string;
-}
-
-const YoutubeList = ({ title }: YoutubeListProps) => {
+const YoutubeList = () => {
+  const isAuth = useSelector((state: RootState) => state.global.isLogin);
   const [videos, setVideos] = useState<GetPopularVideosType | undefined>();
   const [statistics, setStatistics] = useState<
     GetPopularVideosType | undefined
@@ -32,13 +33,25 @@ const YoutubeList = ({ title }: YoutubeListProps) => {
     getVideos();
   }, [getVideos]);
 
+  const [, { open }, Modal] = useModal({ title: '북마크 추가' });
+
+  const openModal = (e: MouseEvent, text: string) => {
+    e.stopPropagation();
+    if (isAuth) open(text);
+  };
+
   return (
     <S.Container>
+      <Modal>
+        <SelectBookmark />
+      </Modal>
       <S.Title>인기 동영상</S.Title>
       <S.VideoListDiv>
         {videos?.items.map((item, idx) => (
           <Fragment key={item.etag}>
-            <S.VideoWrapper>
+            <S.VideoWrapper
+              onClick={(e) => openModal(e, item.snippet.localized.title)}
+            >
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"
