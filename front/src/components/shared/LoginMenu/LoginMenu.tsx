@@ -1,10 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { DefaultTheme, StyledComponent } from 'styled-components';
 
+import useMenu from 'hooks/useMenu';
 import useModal from 'hooks/useModal';
-import { toggleSideMenu, userLogout } from 'store/globalSlice';
-import { useNavigate } from 'react-router-dom';
+import LoginComponent from 'components/LoginComponent';
 
 interface LoginMenuMenuProps {
   isAuth?: boolean;
@@ -12,7 +11,6 @@ interface LoginMenuMenuProps {
     text: string;
     name: string;
     show: boolean;
-    onClick: () => void;
   }[];
   element: StyledComponent<'li', DefaultTheme, {}, never>;
 }
@@ -22,29 +20,26 @@ const LoginMenu = ({
   menus,
   element: Component,
 }: LoginMenuMenuProps) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [{ login, logout }] = useMenu();
+  const [, actions, Modal] = useModal({ title: '로그인' });
 
-  const [, { open }] = useModal();
-
-  const doFunction = async (onClick: () => void) => {
-    if (isAuth) {
-      await onClick();
-      dispatch(userLogout());
-      dispatch(toggleSideMenu(false));
-      navigate('/');
-    } else {
-      open();
-      onClick();
+  const doFunction = () => {
+    if (isAuth) logout();
+    else {
+      actions.open();
+      login();
     }
   };
 
   return (
     <>
+      <Modal>
+        <LoginComponent />
+      </Modal>
       {menus.map(
-        ({ text, name, show, onClick }) =>
+        ({ text, name, show }) =>
           show === isAuth && (
-            <Component key={name} onClick={() => doFunction(onClick)}>
+            <Component key={name} onClick={() => doFunction()}>
               {text}
             </Component>
           ),

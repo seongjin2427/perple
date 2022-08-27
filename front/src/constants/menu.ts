@@ -5,22 +5,11 @@ export const LOGIN_MENU = [
     text: '로그인',
     name: 'login',
     show: false,
-    onClick: async () => {},
   },
   {
     text: '로그아웃',
     name: 'logout',
     show: true,
-    onClick: async () => {
-      const res = await instance.post(
-        '/auth/logout',
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-      console.log(res);
-    },
   },
 ];
 

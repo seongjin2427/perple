@@ -8,9 +8,9 @@ export const Container = styled.div`
   justify-content: space-between;
   position: fixed;
   background: red;
-  z-index: 5000;
   background: white;
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary.hex};
+  z-index: ${({ theme }) => theme.zIndex.header};
 `;
 
 export const LogoDiv = styled.div`

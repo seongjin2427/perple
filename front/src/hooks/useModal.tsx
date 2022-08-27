@@ -1,4 +1,4 @@
-import SecondModal from 'components/shared/SecondModal';
+import SecondModal from 'components/shared/Modal';
 import { ReactNode, useState } from 'react';
 
 export interface SecondModalActionsType {
@@ -19,7 +19,7 @@ interface ReturnSecondModalProps {
   children?: ReactNode;
 }
 
-const useSecondModal = ({
+const useModal = ({
   title,
   component,
 }: SecondModalProps): [
@@ -54,4 +54,4 @@ const useSecondModal = ({
   ];
 };
 
-export default useSecondModal;
+export default useModal;
