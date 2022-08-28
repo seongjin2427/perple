@@ -2,11 +2,10 @@ import React from 'react';
 
 import useBookmark from 'hooks/useBookmark';
 import * as S from './SelectBookmark.styled';
-import { IntegratedVideosType } from 'hooks/useModal';
-import { PopularVideoItemsType, SearchedVideosItemType } from 'api/youtube';
+import { YoutubeVideosItemType } from 'api/youtube';
 
 interface SelectBookmarkProps {
-  item: IntegratedVideosType | undefined;
+  item: YoutubeVideosItemType | undefined;
 }
 
 const SelectBookmark = ({ item }: SelectBookmarkProps) => {
@@ -14,16 +13,10 @@ const SelectBookmark = ({ item }: SelectBookmarkProps) => {
 
   const onClickAddBookmark = () => {
     if (item) {
-      const videoId =
-        (item as SearchedVideosItemType).id.videoId ||
-        (item as PopularVideoItemsType).id;
-      const title =
-        (item as PopularVideoItemsType).snippet.localized.title ||
-        (item as SearchedVideosItemType).snippet.title;
+      const videoId = item.id;
+      const title = item.snippet.localized.title;
       const channelName = item.snippet.channelTitle;
-      const description = item.snippet.description
-
-
+      const description = item.snippet.description;
 
       actions.onClickConfirmAddBookmark(videoId);
     }

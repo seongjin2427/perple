@@ -1,10 +1,6 @@
-import { PopularVideoItemsType, SearchedVideosItemType } from 'api/youtube';
+import { YoutubeVideosItemType } from 'api/youtube';
 import Modal from 'components/shared/Modal';
 import { ReactNode, useState } from 'react';
-
-export type IntegratedVideosType =
-  | PopularVideoItemsType
-  | SearchedVideosItemType;
 
 interface ModalParamsProps {
   title?: string;
@@ -21,7 +17,7 @@ export type ReturnComponentType = ({
 
 interface OpenModalParamsType {
   sTitle?: string;
-  item?: IntegratedVideosType;
+  item?: YoutubeVideosItemType;
 }
 interface ReturnModalProps {
   children?: ReactNode;
@@ -34,11 +30,11 @@ const useModal = ({
   boolean,
   ModalActionsType,
   ReturnComponentType,
-  IntegratedVideosType?,
+  YoutubeVideosItemType?,
 ] => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [subTitle, setSubTitle] = useState<string>('');
-  const [videoInfo, setVideoInfo] = useState<IntegratedVideosType>();
+  const [videoInfo, setVideoInfo] = useState<YoutubeVideosItemType>();
 
   const actions: ModalActionsType = {
     open: function ({ sTitle, item }: OpenModalParamsType) {
