@@ -16,10 +16,11 @@ export const getToken = async (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log('getToken');
   const clientRefreshToken = req.cookies['refreshToken'];
-  if (!clientRefreshToken) {
-    return res.json({});
-  }
+  // if (!clientRefreshToken) {
+  //   return res.json({});
+  // }
   try {
     const { userInfo } = verifyToken(clientRefreshToken) as RefreshTokenType;
 

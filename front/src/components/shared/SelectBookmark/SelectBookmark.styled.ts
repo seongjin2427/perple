@@ -64,11 +64,15 @@ export const ConfirmButton = styled.button`
   `}
 `;
 
-export const AddBookmarkDiv = styled.div`
+interface ModifyModeType {
+  modifyMode: boolean;
+}
+
+export const CreateBookmarkDiv = styled.div<ModifyModeType>`
   display: flex;
   background: white;
-  color: ${({ theme }) => theme.colors.primary.hex};
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};
@@ -77,4 +81,24 @@ export const AddBookmarkDiv = styled.div`
   :hover {
     background: rgb(${({ theme }) => theme.colors.thirdary.rgb}, 0.8);
   }
+
+  * {
+    color: ${({ theme }) => theme.colors.primary.hex};
+  }
+`;
+
+export const CreateBookmarkParagraph = styled.p`
+
+`;
+
+export const CreateBookmarkInput = styled.input`
+  border: 0;
+  background: red;
+`;
+
+export const CreateBookmarkButtonDiv = styled.div``;
+
+export const CreatBookmarkButton = styled.button`
+  background: none;
+  border: none;
 `;

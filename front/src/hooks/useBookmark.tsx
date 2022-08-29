@@ -1,50 +1,55 @@
+import { createBookmark, getAllBookmark, addBookmark } from 'api/bookmark';
 import { useEffect, useState } from 'react';
 
-const dummyBookmark = [
-  {
-    _id: '1',
-    title: '안녕하세요',
-    count: 5,
-  },
-  {
-    _id: '2',
-    title: '북마크입니다.',
-    count: 4,
-  },
-];
+export interface BookmarkInfoType {
+  videoId: string;
+  title: string;
+  channelName: string;
+  description: string;
+  thumbnailUrl: string;
+}
 
 export type BookmarkType = {
+  bookmarkName: string;
   _id: string;
-  title: string;
   count: number;
 }[];
 
 interface UseBookmarkActionType {
-  onChangeBookmarkCheck: (idx: number) => void;
-  onClickConfirmAddBookmark: (videoId: string) => void;
+  onChangeBookmarkCheck: (idx: string) => void;
+  onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
+  onClickCreateBookmark: (bookmark: string) => void;
 }
 
 const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType>(dummyBookmark);
-  // const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
   const [addBookmarkList, setAddBookmarkList] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   setBookmarkList()
-  // }, [])
+  const getBookmarkList = async () => {
+    const fetchedBookmark = await getAllBookmark();
+    setBookmarkList(fetchedBookmark.bookmark);
+  };
+
+  useEffect(() => {
+    getBookmarkList();
+  }, []);
 
   const actions = {
-    onChangeBookmarkCheck: function (idx: number) {
-      const bookmarkId = bookmarkList.filter((_, bmId) => bmId === idx)[0]._id;
-      if (addBookmarkList.includes(bookmarkId))
+    onChangeBookmarkCheck: function (idx: string) {
+      const selectedId = bookmarkList.filter(({ _id }) => _id === idx)[0]._id;
+
+      if (addBookmarkList.includes(selectedId))
         setAddBookmarkList(() =>
-          addBookmarkList.filter((id) => id !== bookmarkId),
+          addBookmarkList.filter((id) => id !== selectedId),
         );
-      else setAddBookmarkList((prev) => [bookmarkId, ...prev]);
+      else setAddBookmarkList((prev) => [selectedId, ...prev]);
     },
-    onClickConfirmAddBookmark: async function (videoId: string) {
-      console.log('addBookmarkList', addBookmarkList);
-      console.log(videoId);
+    onClickConfirmAddBookmark: async function (videoInfo: BookmarkInfoType) {
+      addBookmark(videoInfo, addBookmarkList);
+    },
+    onClickCreateBookmark: async function (bookmarkTitle: string) {
+      await createBookmark(bookmarkTitle);
+      await getBookmarkList();
     },
   };
 

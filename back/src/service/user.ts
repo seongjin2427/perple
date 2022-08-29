@@ -10,6 +10,7 @@ interface UserType {
 
 export const saveUser = async (userInfo: UserType) => {
   const newUser = new User(userInfo);
+
   try {
     await newUser.save();
     return newUser;

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 
-import { IUserDocument } from '@/src/models/user';
+import User, { IUserDocument } from '@/src/models/user';
 import { verifyToken } from '@/src/utils/jwt';
 
 const isAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,10 +21,14 @@ const isAuth = async (req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ error: 'Somethings wrong!' });
   }
 
+  if (typeof decodedToken === 'string' && decodedToken === 'Token is expired') {
+    return res.redirect('/');
+  }
   if (!decodedToken) {
     res.status(401).json({ error: 'Not authenticated' });
   }
-  req.userInfo = decodedToken?.userInfo;
+
+  req.userInfo = await User.findById(decodedToken?.userInfo._id);
 
   next();
 };

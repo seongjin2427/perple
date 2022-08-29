@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-interface IBookmark {
+interface IVideo {
   title: string;
   channel_name: string;
   description: string;
@@ -8,11 +8,11 @@ interface IBookmark {
   thumbnail_url: string;
 }
 
-export interface IBookmarkDocument extends IBookmark, Document {}
+export interface IVideoDocument extends IVideo, Document {}
 
-interface IBookmarkModel extends Model<IBookmarkDocument> {}
+interface IVideoModel extends Model<IVideoDocument> {}
 
-const bookmarkSchema = new Schema(
+const videoSchema = new Schema(
   {
     title: {
       type: String,
@@ -28,6 +28,7 @@ const bookmarkSchema = new Schema(
     },
     videoId: {
       type: String,
+      required: true,
     },
     thumbnailUrl: {
       type: String,
@@ -46,7 +47,7 @@ const bookmarkSchema = new Schema(
   },
 );
 
-export default mongoose.model<IBookmarkDocument, IBookmarkModel>(
-  'Bookmark',
-  bookmarkSchema,
+export default mongoose.model<IVideoDocument, IVideoModel>(
+  'Video',
+  videoSchema,
 );

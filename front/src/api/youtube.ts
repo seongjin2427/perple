@@ -84,7 +84,7 @@ export const getYoutubeVideos = async ({
 
   if (searchWord) {
     const { data } = await axios.get<SearchedVideoIdType>(
-      `https://www.googleapis.com/youtube/v3/search?${urlPageToken}&q=${searchWord}&videoEmbeddable=true&type=video&part=id&order=relevance&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/search?${urlPageToken}&q=${searchWord}&videoEmbeddable=true&type=video&maxResults=12&part=id&order=relevance&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
       {
         withCredentials: false,
       },
@@ -103,7 +103,7 @@ export const getYoutubeVideos = async ({
 
   try {
     const { data } = await axios.get<GetYoutubeVideosType>(
-      `https://www.googleapis.com/youtube/v3/videos?${searchOrChart}&part=snippet,statistics&${urlPageToken}&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      `https://www.googleapis.com/youtube/v3/videos?${searchOrChart}&part=snippet,statistics&${urlPageToken}&maxResults=12&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
       {
         withCredentials: false,
       },

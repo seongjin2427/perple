@@ -35,6 +35,7 @@ export const verifyToken = (token: string) => {
     const e = err as SystemError;
     if (e.name === 'TokenExpiredError') {
       console.log(e);
+      return 'Token is expired';
     }
     if (e.name === 'JsonWebTokenError') {
       console.log(e);
