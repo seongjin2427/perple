@@ -31,6 +31,7 @@ export const addBookmark = async (
       selectBookmarkId,
     });
     console.log(res);
+    if (res.status === 200) alert('등록 완료!');
   } catch (e) {
     console.log(e);
   }

@@ -1,10 +1,4 @@
-import {
-  ComponentProps,
-  HTMLAttributes,
-  MouseEvent,
-  ReactNode,
-  useCallback,
-} from 'react';
+import { HTMLAttributes, MouseEvent, ReactNode, useEffect } from 'react';
 import reactDom from 'react-dom';
 
 import { ReturnComponentType, ModalActionsType } from 'hooks/useModal';
@@ -34,6 +28,11 @@ const SecondModal = ({
 }: SecondModalProps) => {
   const el = document.getElementById('modal')!;
 
+  useEffect(() => {
+    if (active) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+  }, [active]);
+
   return reactDom.createPortal(
     <Background toggle={active} onClick={actions.close}>
       <Wrapper>
@@ -47,7 +46,6 @@ const SecondModal = ({
   );
 };
 
-// interface BackgroundProps extends ComponentProps<'div'> {
 interface BackgroundProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
   toggle: boolean;

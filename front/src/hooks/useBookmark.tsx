@@ -48,7 +48,8 @@ const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
       else setAddBookmarkList((prev) => [selectedId, ...prev]);
     },
     onClickConfirmAddBookmark: async function (videoInfo: BookmarkInfoType) {
-      addBookmark(videoInfo, addBookmarkList);
+      if (addBookmarkList.length > 0)
+        await addBookmark(videoInfo, addBookmarkList);
     },
     onClickCreateBookmark: async function (bookmarkTitle: string) {
       await createBookmark(bookmarkTitle);

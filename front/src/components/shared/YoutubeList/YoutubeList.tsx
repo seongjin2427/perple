@@ -22,7 +22,7 @@ const YoutubeList = () => {
     if (searchWord) setTitle(searchWord);
   }, [getVideos, searchWord]);
 
-  const [, { open }, Modal, videoInfo] = useModal({ title: '북마크 추가' });
+  const [, { open, close }, Modal, videoInfo] = useModal({ title: '북마크 추가' });
 
   const openModal = (e: MouseEvent, item: YoutubeVideosItemType) => {
     e.stopPropagation();
@@ -34,7 +34,7 @@ const YoutubeList = () => {
   return (
     <S.Container>
       <Modal>
-        <SelectBookmark item={videoInfo} />
+        <SelectBookmark item={videoInfo} close={close} />
       </Modal>
       <S.Title>
         {(searchWord && `검색단어 : ${title}`) || '인기 동영상'}

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export const makeToken = (userId: string) => {
   try {
     return jwt.sign({ userId }, 'perpleToken', {
-      expiresIn: '10s',
+      expiresIn: '2h',
     });
   } catch (e) {
     console.log(e);

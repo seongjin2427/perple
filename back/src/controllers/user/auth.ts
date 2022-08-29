@@ -105,7 +105,7 @@ export const getGoogleToken = async (
     const { data: fetchedUser } = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`,
     );
-    // console.log(fetchedUser);
+    console.log('fetchedUser', fetchedUser);
 
     const { sub, email, name, picture } = fetchedUser;
     const userInformation = {
@@ -115,7 +115,7 @@ export const getGoogleToken = async (
       type: 'google',
       profileImage: picture,
     };
-    // console.log(userInformation);
+    console.log('userInformation', userInformation);
 
     const userInfo = await findUserBySnsId('google', sub);
     let refreshToken: string | undefined;

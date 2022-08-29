@@ -2,14 +2,34 @@ import { IVideoDocument } from '@/src/models/video';
 import { Schema, Document, Model, ObjectId, model } from 'mongoose';
 
 export interface IUserBookmark {
-  bookmarkId: ObjectId;
   bookmarkName: string;
   count: number;
-  _id: ObjectId;
   videos: {
     videoId: ObjectId;
   }[];
 }
+
+export interface IUserBookmarkDocument extends IUserBookmark, Document {}
+
+interface IUserBookmarkModel extends Model<IUserBookmark> {}
+
+const userBookmarkSchema: Schema<
+  IUserBookmarkDocument,
+  IUserBookmarkDocument,
+  IUserModel
+> = new Schema({
+  bookmarkName: {
+    type: String,
+    required: true,
+  },
+  count: Number,
+  videos: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Video',
+    },
+  ],
+});
 
 interface IUser {
   snsId: string;
@@ -39,7 +59,6 @@ const userSchema: Schema<IUserDocument, IUserDocument, IUserModel> = new Schema(
     },
     email: {
       type: String,
-      required: true,
     },
     nickname: {
       type: String,
@@ -70,7 +89,7 @@ const userSchema: Schema<IUserDocument, IUserDocument, IUserModel> = new Schema(
             {
               videosId: {
                 type: Schema.Types.ObjectId,
-                ref: 'Videos',
+                ref: 'Video',
               },
             },
           ],
@@ -106,7 +125,7 @@ userSchema.methods.addBookmark = async function (
 
   const selectBookmark = selectBookmarkId.map((id: string) => {
     return updatedBookmark.findIndex(
-      (bm: IUserBookmark) => bm._id.toString() === id.toString(),
+      (bm) => bm._id.toString() === id.toString(),
     );
   });
 

@@ -7,12 +7,13 @@ import CreateFolder from 'components/shared/CreateFolder';
 
 interface SelectBookmarkProps {
   item: YoutubeVideosItemType | undefined;
+  close: () => void;
 }
 
-const SelectBookmark = ({ item }: SelectBookmarkProps) => {
+const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
   const [bookmark, actions] = useBookmark();
 
-  const onClickAddBookmark = useCallback(() => {
+  const onClickAddBookmark = useCallback(async () => {
     if (item) {
       const videoId = item.id;
       const title = item.snippet.localized.title;
@@ -27,9 +28,10 @@ const SelectBookmark = ({ item }: SelectBookmarkProps) => {
         description,
         thumbnailUrl,
       };
-      actions.onClickConfirmAddBookmark(videoInfo);
+      await actions.onClickConfirmAddBookmark(videoInfo);
+      close();
     }
-  }, [item, actions]);
+  }, [item, actions, close]);
 
   return (
     <S.Container>

@@ -5,8 +5,9 @@ import { RequestHandler } from 'express';
 export const getAllBookmark: RequestHandler = async (req, res, next) => {
   console.log('getAllBookmark');
   const user = await req.userInfo?.populate<IUserDocument>('bookmarks');
-
-  res.status(200).json({ bookmark: user?.bookmarks.bookmark });
+  const test = await req.userInfo?.bookmarks;
+  console.log('test', test);
+  res.status(200).json({ bookmark: user?.bookmarks.bookmark, test });
 };
 
 export const createBookmark: RequestHandler = async (req, res, next) => {
