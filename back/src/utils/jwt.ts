@@ -1,19 +1,18 @@
-import { IUserDocument } from '@/src/models/user';
 import jwt from 'jsonwebtoken';
 
-export const makeToken = (userInfo: IUserDocument) => {
+export const makeToken = (userId: string) => {
   try {
-    return jwt.sign({ userInfo }, 'perpleToken', {
-      expiresIn: '2h',
+    return jwt.sign({ userId }, 'perpleToken', {
+      expiresIn: '10s',
     });
   } catch (e) {
     console.log(e);
   }
 };
 
-export const makeRefreshToken = (userInfo: IUserDocument) => {
+export const makeRefreshToken = (userId: string) => {
   try {
-    return jwt.sign({ userInfo }, 'perpleToken', {
+    return jwt.sign({ userId }, 'perpleToken', {
       expiresIn: '14d',
     });
   } catch (e) {
@@ -35,7 +34,7 @@ export const verifyToken = (token: string) => {
     const e = err as SystemError;
     if (e.name === 'TokenExpiredError') {
       console.log(e);
-      return 'Token is expired';
+      return 'Expired token';
     }
     if (e.name === 'JsonWebTokenError') {
       console.log(e);
@@ -43,6 +42,15 @@ export const verifyToken = (token: string) => {
     if (e.name === 'NotBeforeError') {
       console.log(e);
     }
-    return false;
+    return 'error';
+  }
+};
+
+export const decodeToken = (token: string) => {
+  try {
+    const decoded = jwt.decode(token);
+    return decoded;
+  } catch (err) {
+    console.log(err);
   }
 };

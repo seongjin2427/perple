@@ -34,7 +34,8 @@ const SelectBookmark = ({ item }: SelectBookmarkProps) => {
   return (
     <S.Container>
       <S.BookmarkWrapper>
-        {bookmark.length > 0 &&
+        {bookmark &&
+          bookmark.length > 0 &&
           bookmark.map(({ bookmarkName, count, _id }) => (
             <S.BookmarkLabel key={_id} htmlFor={_id}>
               <S.BookmarkCheckbox
@@ -53,4 +54,4 @@ const SelectBookmark = ({ item }: SelectBookmarkProps) => {
   );
 };
 
-export default SelectBookmark;
+export default React.memo(SelectBookmark);

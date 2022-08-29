@@ -4,9 +4,6 @@ interface UserInfoType {
   _id: string;
   email: string;
   nickname: string;
-  profileImage: string;
-  snsId: string;
-  type: string;
 }
 
 interface initialStateType {
@@ -26,9 +23,6 @@ const initialState: initialStateType = {
     _id: '',
     email: '',
     nickname: '',
-    profileImage: '',
-    snsId: '',
-    type: '',
   },
 };
 
@@ -50,6 +44,7 @@ const globalSlice = createSlice({
     },
     userLogout(state) {
       state.isLogin = false;
+      localStorage.removeItem('Authorization');
     },
     userInfoSet(state, action: PayloadAction<UserInfoType>) {
       state.userInfo = action.payload;

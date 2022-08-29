@@ -10,25 +10,37 @@ interface getAllBookmarkResponseType {
 }
 
 export const getAllBookmark = async () => {
-  const { data } = await instance.get<getAllBookmarkResponseType>(
-    '/bm/bookmark',
-  );
-  console.log('getAllBookmark', data);
-  return data;
+  try {
+    const { data } = await instance.get<getAllBookmarkResponseType>(
+      '/bm/bookmark',
+    );
+    console.log('getAllBookmark', data);
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const addBookmark = async (
   bookmarkInfo: BookmarkInfoType,
   selectBookmarkId: string[],
 ) => {
-  const res = await instance.post('/bm/bookmark', {
-    bookmarkInfo,
-    selectBookmarkId,
-  });
-  console.log(res);
+  try {
+    const res = await instance.post('/bm/bookmark', {
+      bookmarkInfo,
+      selectBookmarkId,
+    });
+    console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const createBookmark = async (bookmarkTitle: string) => {
-  const res = await instance.post('/bm/create/bookmark', { bookmarkTitle });
-  console.log(res);
+  try {
+    const res = await instance.post('/bm/create/bookmark', { bookmarkTitle });
+    console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
 };

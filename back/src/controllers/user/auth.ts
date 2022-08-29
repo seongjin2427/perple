@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 
+import User from '@/src/models/user';
 import { findUserBySnsId, saveUser } from '@/src/service/user';
 import { makeRefreshToken, makeToken, verifyToken } from '@/src/utils/jwt';
-import { IUserDocument } from '@/src/models/user';
 
 interface RefreshTokenType {
-  userInfo: IUserDocument;
+  userId: string;
+  message: string;
   iat: number;
   exp: number;
 }
@@ -18,20 +19,39 @@ export const getToken = async (
 ) => {
   console.log('getToken');
   const clientRefreshToken = req.cookies['refreshToken'];
-  // if (!clientRefreshToken) {
-  //   return res.json({});
-  // }
+  if (!clientRefreshToken) {
+    return res.redirect('/');
+  }
   try {
-    const { userInfo } = verifyToken(clientRefreshToken) as RefreshTokenType;
+    console.log('clientRefreshToken', clientRefreshToken);
+    const { userId, message } = verifyToken(
+      clientRefreshToken,
+    ) as RefreshTokenType;
+    console.log('message', message);
+    if (message === 'Token is expired') {
+      return res.json({ message: 'refreshToken is expired' });
+    }
 
-    if (userInfo) {
-      const accessToken = makeToken(userInfo);
-      const refreshToken = makeRefreshToken(userInfo);
+    if (userId) {
+      const accessToken = makeToken(userId);
+      const refreshToken = makeRefreshToken(userId);
 
       res.cookie('refreshToken', refreshToken, {
-        maxAge: 60 * 60 * 24 * 2 * 10000,
+        maxAge: 60 * 60 * 24 * 1000,
         httpOnly: true,
       });
+
+      const user = await User.findById(userId);
+      await User.updateOne(
+        { _id: userId },
+        {
+          $set: {
+            refreshToken,
+          },
+        },
+      );
+
+      const userInfo = { nickname: user?.nickname, email: user?.email };
 
       return res.json({ accessToken, userInfo });
     }
@@ -101,11 +121,11 @@ export const getGoogleToken = async (
     let refreshToken: string | undefined;
 
     if (userInfo) {
-      refreshToken = makeRefreshToken(userInfo);
+      refreshToken = makeRefreshToken(userInfo._id);
     } else {
       const signUpUser = await saveUser(userInformation);
       if (typeof signUpUser !== 'string') {
-        refreshToken = makeRefreshToken(signUpUser);
+        refreshToken = makeRefreshToken(signUpUser._id);
       }
     }
 
