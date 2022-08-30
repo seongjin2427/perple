@@ -4,7 +4,19 @@ import Video from '@/src/models/video';
 
 export const getAllBookmark: RequestHandler = async (req, res, next) => {
   console.log('getAllBookmark');
-  const user = await req.userInfo?.populate('bookmarks.bookmark');
+  const deepPopulate = req.query.deep;
+  let user;
+  if (deepPopulate === 'true') {
+    user = await req.userInfo?.populate({
+      path: 'bookmarks.bookmark',
+      populate: {
+        path: 'videos.videoId',
+        model: Video,
+      },
+    });
+  } else {
+    user = await req.userInfo?.populate('bookmarks.bookmark');
+  }
   res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
 

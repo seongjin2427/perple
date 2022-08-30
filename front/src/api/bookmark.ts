@@ -1,18 +1,34 @@
 import instance from 'api/instance';
 import { BookmarkInfoType } from 'hooks/useBookmark';
 
-interface getAllBookmarkResponseType {
-  bookmark: {
-    bookmarkName: string;
-    _id: string;
-    count: number;
+export interface BookmarkVideoInfoType {
+  _id: string;
+  videoId: string;
+  channelName: string;
+  description: string;
+  thumbnailUrl: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookmarkType {
+  bookmarkName: string;
+  _id: string;
+  count: number;
+  videos: {
+    videoId: BookmarkVideoInfoType;
   }[];
 }
 
-export const getAllBookmark = async () => {
+interface getAllBookmarkResponseType {
+  bookmark: BookmarkType[];
+}
+
+export const getAllBookmark = async (option: string) => {
   try {
     const { data } = await instance.get<getAllBookmarkResponseType>(
-      '/bm/bookmark',
+      `/bm/bookmark/?deep=${option}`,
     );
     console.log('getAllBookmark', data);
     return data;

@@ -9,7 +9,7 @@ export const Container = styled.div`
 export const BookmarkWrapper = styled.div`
   width: 100%;
   height: 15rem;
-  padding: 1rem 0;
+  padding: 0.5rem 0 0 0;
   margin: 1rem 0;
   overflow: scroll;
 `;

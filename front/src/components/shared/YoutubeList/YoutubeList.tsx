@@ -13,7 +13,7 @@ import useYoutube from 'hooks/useYoutube';
 
 const YoutubeList = () => {
   const { searchWord } = useParams();
-  const isAuth = useSelector((state: RootState) => state.global.isLogin);
+  const isAuth = useSelector(({ global }: RootState) => global.isLogin);
   const [title, setTitle] = useState<string>('');
   const [videos, pageInfo, getVideos] = useYoutube();
 
@@ -22,7 +22,9 @@ const YoutubeList = () => {
     if (searchWord) setTitle(searchWord);
   }, [getVideos, searchWord]);
 
-  const [, { open, close }, Modal, videoInfo] = useModal({ title: '북마크 추가' });
+  const [, { open, close }, Modal, videoInfo] = useModal({
+    title: '북마크 추가',
+  });
 
   const openModal = (e: MouseEvent, item: YoutubeVideosItemType) => {
     e.stopPropagation();

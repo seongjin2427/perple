@@ -1,7 +1,13 @@
-import { createBookmark, getAllBookmark, addBookmark } from 'api/bookmark';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import { RootState } from 'store/store';
+import {
+  createBookmark,
+  getAllBookmark,
+  addBookmark,
+  BookmarkType,
+} from 'api/bookmark';
 
 export interface BookmarkInfoType {
   videoId: string;
@@ -11,31 +17,27 @@ export interface BookmarkInfoType {
   thumbnailUrl: string;
 }
 
-export type BookmarkType = {
-  bookmarkName: string;
-  _id: string;
-  count: number;
-}[];
-
 interface UseBookmarkActionType {
   onChangeBookmarkCheck: (idx: string) => void;
   onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
   onClickCreateBookmark: (bookmark: string) => void;
 }
 
-const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
+const useBookmark = (
+  options?: 'true',
+): [BookmarkType[], UseBookmarkActionType] => {
   const isAuth = useSelector(({ global }: RootState) => global.isLogin);
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
   const [addBookmarkList, setAddBookmarkList] = useState<string[]>([]);
 
-  const getBookmarkList = async () => {
-    const fetchedBookmark = await getAllBookmark();
+  const getBookmarkList = async (option?: string) => {
+    const fetchedBookmark = await getAllBookmark(option || '');
     if (fetchedBookmark) setBookmarkList(fetchedBookmark.bookmark);
   };
 
   useEffect(() => {
-    if (isAuth) getBookmarkList();
-  }, [isAuth]);
+    if (isAuth) getBookmarkList(options);
+  }, [isAuth, options]);
 
   const actions = {
     onChangeBookmarkCheck: function (idx: string) {

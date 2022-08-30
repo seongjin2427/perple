@@ -1,5 +1,3 @@
-import instance from 'api/instance';
-
 export const LOGIN_MENU = [
   {
     text: '로그인',
@@ -20,8 +18,8 @@ export const AUTH_HEADER_MENU = [
     link: '/',
   },
   {
-    text: '공유하기',
-    name: 'share',
-    link: '/',
+    text: '북마크',
+    name: 'bookmark',
+    link: '/bookmark',
   },
 ];
