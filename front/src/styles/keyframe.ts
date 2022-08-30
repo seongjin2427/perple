@@ -8,7 +8,7 @@ export const SLIDE_DOWN = keyframes`
   100% {
     display: block;
     opacity: 1;
-    top: 45%;
+    top: 40%;
   }
 
 `;

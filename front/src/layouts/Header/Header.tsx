@@ -2,17 +2,22 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import SideMenu from 'layouts/SideMenu';
 import { RootState } from 'store/store';
 import SearchForm from 'components/shared/SearchForm';
-import SideMenu from 'layouts/SideMenu';
 import HamburgerButton from 'components/shared/HamburgerButton';
-import Modal from 'components/shared/Modal';
 import LoginComponent from 'components/LoginComponent';
 import Menu from 'components/shared/Menu';
 import LoginMenu from 'components/shared/LoginMenu';
 
 import instance from 'api/instance';
-import { toggleSideMenu, userInfoSet, userLogin } from 'store/globalSlice';
+import useSecondModal from 'hooks/useModal';
+import {
+  toggleSideMenu,
+  userInfoSet,
+  userLogin,
+  userLogout,
+} from 'store/globalSlice';
 import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
 
@@ -26,19 +31,28 @@ const Header = () => {
   const loginFunction = useCallback(async () => {
     if (!isAuth) {
       try {
-        const { data } = await instance.post(
+        const { data, status } = await instance.post(
           'http://localhost:8080/auth/token',
           {},
           { withCredentials: true },
         );
+        console.log('status', status);
+
+        console.log(data);
 
         if (data.accessToken) {
           localStorage.setItem('Authorization', data.accessToken);
           dispatch(userInfoSet(data.userInfo));
           dispatch(userLogin());
         }
+        const accessToken = localStorage.getItem('Authorization');
+        if (!accessToken) {
+          dispatch(userLogout());
+          loginFunction();
+        }
       } catch (e) {
         console.log(e);
+        dispatch(userLogout());
       }
     }
   }, [dispatch, isAuth]);
@@ -47,8 +61,14 @@ const Header = () => {
     loginFunction();
   }, [loginFunction]);
 
+  const [, actions, Modal] = useSecondModal({
+    title: '로그인',
+    component: () => <LoginComponent />,
+  });
+
   return (
     <S.Container>
+      <Modal />
       <S.LogoDiv onClick={() => navigate('/')} />
       <S.SearchDiv>
         <SearchForm />
@@ -73,7 +93,6 @@ const Header = () => {
         <HamburgerButton width={50} toggle={sideMenu} />
       </S.MenuButton>
       <SideMenu active={sideMenu} />
-      <Modal title="로그인" element={<LoginComponent />} />
     </S.Container>
   );
 };

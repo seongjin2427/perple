@@ -1,44 +1,48 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, MouseEvent, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import { getPopularVideos, GetPopularVideosType } from 'api/youtube';
+import { YoutubeVideosItemType } from 'api/youtube';
+import { RootState } from 'store/store';
+import useModal from 'hooks/useModal';
 import Pagination from 'components/shared/Pagination';
 import VideoStatistics from 'components/shared/VideoStatistics';
+import SelectBookmark from 'components/shared/SelectBookmark';
 import * as S from './YoutubeList.styled';
+import useYoutube from 'hooks/useYoutube';
 
-interface YoutubeListProps {
-  title: string;
-}
-
-const YoutubeList = ({ title }: YoutubeListProps) => {
-  const [videos, setVideos] = useState<GetPopularVideosType | undefined>();
-  const [statistics, setStatistics] = useState<
-    GetPopularVideosType | undefined
-  >();
-
-  const getVideos = useCallback(
-    async (token?: string) => {
-      const fetchedVideos: GetPopularVideosType | undefined =
-        await getPopularVideos({ token });
-
-      setVideos(fetchedVideos);
-      setStatistics(fetchedVideos);
-
-      window.scrollTo({ top: 0 });
-    },
-    [setVideos],
-  );
+const YoutubeList = () => {
+  const { searchWord } = useParams();
+  const isAuth = useSelector((state: RootState) => state.global.isLogin);
+  const [title, setTitle] = useState<string>('');
+  const [videos, pageInfo, getVideos] = useYoutube();
 
   useEffect(() => {
     getVideos();
-  }, [getVideos]);
+    if (searchWord) setTitle(searchWord);
+  }, [getVideos, searchWord]);
+
+  const [, { open, close }, Modal, videoInfo] = useModal({ title: '북마크 추가' });
+
+  const openModal = (e: MouseEvent, item: YoutubeVideosItemType) => {
+    e.stopPropagation();
+    if (isAuth) {
+      open({ sTitle: item.snippet.title, item });
+    }
+  };
 
   return (
     <S.Container>
-      <S.Title>인기 동영상</S.Title>
+      <Modal>
+        <SelectBookmark item={videoInfo} close={close} />
+      </Modal>
+      <S.Title>
+        {(searchWord && `검색단어 : ${title}`) || '인기 동영상'}
+      </S.Title>
       <S.VideoListDiv>
-        {videos?.items.map((item, idx) => (
+        {videos?.items.map((item) => (
           <Fragment key={item.etag}>
-            <S.VideoWrapper>
+            <S.VideoWrapper onClick={(e) => openModal(e, item)}>
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"
@@ -47,16 +51,10 @@ const YoutubeList = ({ title }: YoutubeListProps) => {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
-                {statistics && statistics?.items[idx].id === item.id && (
-                  <VideoStatistics
-                    statistics={statistics?.items[idx].statistics}
-                  />
-                )}
+                <VideoStatistics statistics={item?.statistics} />
               </S.VideoThumbnailDiv>
               <S.VideoTextArea>
-                <S.VideoTitle>
-                  {item.snippet.localized.title || item.snippet.title}
-                </S.VideoTitle>
+                <S.VideoTitle>{item.snippet.localized.title}</S.VideoTitle>
                 <S.VideoChannelTitle>
                   {item.snippet.channelTitle}
                 </S.VideoChannelTitle>
@@ -66,9 +64,9 @@ const YoutubeList = ({ title }: YoutubeListProps) => {
         ))}
       </S.VideoListDiv>
       <Pagination
-        prevPageToken={videos?.prevPageToken}
-        nextPageToken={videos?.nextPageToken}
-        pageInfo={videos?.pageInfo}
+        prevPageToken={pageInfo?.prevPageToken}
+        nextPageToken={pageInfo?.nextPageToken}
+        pageInfo={pageInfo}
         getVideos={getVideos}
       />
     </S.Container>

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DefaultTheme, StyledComponent } from 'styled-components';
 
@@ -20,13 +20,13 @@ const Menu = ({ isAuth, menus, element: Component }: MenuProps) => {
   };
 
   return (
-    <Fragment>
+    <>
       {menus.map(({ text, link, name }) => (
         <Component key={name} onClick={() => doFunction(link)}>
           {text}
         </Component>
       ))}
-    </Fragment>
+    </>
   );
 };
 

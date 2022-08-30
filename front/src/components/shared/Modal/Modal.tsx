@@ -1,29 +1,79 @@
-import useModal from 'hooks/useModal';
-import React, { useEffect } from 'react';
+import { HTMLAttributes, MouseEvent, ReactNode, useEffect } from 'react';
+import reactDom from 'react-dom';
 
+import { ReturnComponentType, ModalActionsType } from 'hooks/useModal';
 import * as S from './Modal.styled';
 
 interface ModalProps {
-  title: string;
-  element: JSX.Element;
+  children?: ReactNode;
+  toggle: boolean;
 }
 
-const Modal = ({ title, element }: ModalProps) => {
-  const [modalShowBoolean, { close }] = useModal();
+interface SecondModalProps {
+  active: boolean;
+  title?: string;
+  subTitle?: string;
+  actions: ModalActionsType;
+  children?: ReactNode;
+  component?: ReturnComponentType;
+}
+
+const SecondModal = ({
+  active,
+  title,
+  actions,
+  subTitle,
+  children,
+  component: Component,
+}: SecondModalProps) => {
+  const el = document.getElementById('modal')!;
 
   useEffect(() => {
-    if (modalShowBoolean) document.body.style.overflow = 'hidden';
+    if (active) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
-  }, [modalShowBoolean]);
+  }, [active]);
 
-  return (
-    <S.Container active={modalShowBoolean} onClick={close}>
-      <S.ModalWrapper>
-        <S.Title>{title}</S.Title>
-        {element}
-      </S.ModalWrapper>
-    </S.Container>
+  return reactDom.createPortal(
+    <Background toggle={active} onClick={actions.close}>
+      <Wrapper>
+        <Title>{title}</Title>
+        <SubTitle>{subTitle}</SubTitle>
+        {children}
+        {Component && <Component>{children}</Component>}
+      </Wrapper>
+    </Background>,
+    el,
   );
 };
 
-export default React.memo(Modal);
+interface BackgroundProps extends HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode;
+  toggle: boolean;
+}
+
+const Background = ({ children, toggle, onClick }: BackgroundProps) => {
+  return (
+    <S.BlackBackground onClick={onClick} toggle={toggle}>
+      {children}
+    </S.BlackBackground>
+  );
+};
+
+const Title = ({ children }: Omit<ModalProps, 'toggle'>) => {
+  return <S.Title>{children}</S.Title>;
+};
+
+const SubTitle = ({ children }: Omit<ModalProps, 'toggle'>) => {
+  return <S.SubTitle>{children}</S.SubTitle>;
+};
+
+const Wrapper = ({ children }: Omit<ModalProps, 'toggle'>) => {
+  const test = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+  return (
+    <S.ModalContentWrapper onClick={test}>{children}</S.ModalContentWrapper>
+  );
+};
+
+export default SecondModal;

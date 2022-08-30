@@ -8,17 +8,20 @@ import * as S from './SearchForm.styled';
 const SearchForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const word = useRef<HTMLInputElement>(null);
+  const searchWord = useRef<HTMLInputElement>(null);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(getSearchWord(word.current?.value || ''));
-    navigate(`/search/${word.current?.value}`);
+    if (searchWord.current?.value) {
+      dispatch(getSearchWord(searchWord.current?.value));
+      navigate(`/search/${searchWord.current?.value}`);
+      searchWord.current!.value = '';
+    }
   };
 
   return (
     <S.SearchForm onSubmit={onSubmit}>
-      <S.SearchInput name="search" ref={word} />
+      <S.SearchInput name="searchWord" ref={searchWord} />
       <S.SearchButton>검색</S.SearchButton>
     </S.SearchForm>
   );

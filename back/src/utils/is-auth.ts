@@ -1,30 +1,49 @@
-import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 
-import { IUserDocument } from '@/src/models/user';
-import { verifyToken } from '@/src/utils/jwt';
+import User from '@/src/models/user';
+import {
+  decodeToken,
+  makeRefreshToken,
+  makeToken,
+  verifyToken,
+} from '@/src/utils/jwt';
+
+interface TokenType {
+  userId: string;
+  iat: number;
+  exp: number;
+}
 
 const isAuth = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('isAuth');
+
   const authHeader = req.get('Authorization');
   if (!authHeader) {
-    res.status(401).json({ error: 'Not authenticated' });
+    return res.status(401).json({ error: 'Not authenticated' });
   }
-  const token = authHeader?.split(' ')[1];
+  const [tokenType, tokenValue] = authHeader?.split(' ');
+  const refreshToken = req.cookies['refreshToken'];
   let decodedToken;
 
-  try {
-    if (token) {
-      decodedToken = verifyToken(token) as { userInfo: IUserDocument };
-    }
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ error: 'Somethings wrong!' });
+  console.log(tokenValue);
+  if (tokenValue !== 'null' && tokenValue !== undefined) {
+    decodedToken = verifyToken(tokenValue) as TokenType;
+  }
+  if (refreshToken) {
+    decodedToken = verifyToken(refreshToken) as TokenType;
   }
 
-  if (!decodedToken) {
-    res.status(401).json({ error: 'Not authenticated' });
+  if (decodedToken && decodedToken.toString() === 'Expired token') {
+    res.clearCookie('refreshToken');
+    return res.json({ errorMessage: 'login needed' });
   }
-  req.userInfo = decodedToken?.userInfo;
+  if (!decodedToken) {
+    return res.json({ errorMessage: 'login needed' });
+  }
+
+  console.log('decodedToken', decodedToken);
+  console.log('8');
+  req.userInfo = await User.findById(decodedToken?.userId);
 
   next();
 };

@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 interface ThumbnailType {
   width: number;
   height: number;
@@ -25,14 +26,14 @@ interface SnippetType {
   tags: string[];
 }
 
-interface StatisticsType {
+export interface StatisticsType {
   commentCount: string;
   favoriteCount: string;
   likeCount: string;
   viewCount: string;
 }
 
-interface DefaultYoutubeType {
+export interface DefaultYoutubeType {
   prevPageToken: string;
   nextPageToken: string;
   pageInfo: {
@@ -41,94 +42,87 @@ interface DefaultYoutubeType {
   };
 }
 
-interface PopularVideosType {
-  items: {
-    id: string;
-    title: string;
-    etag: string;
-    kind: string;
-    snippet: SnippetType;
-    statistics: StatisticsType;
-  }[];
+export interface YoutubeVideosItemType {
+  id: string;
+  title: string;
+  etag: string;
+  kind: string;
+  snippet: SnippetType;
+  statistics: StatisticsType;
 }
 
-interface SearchedVideosType {
+interface YoutubeVideoItemsType {
+  items: YoutubeVideosItemType[];
+}
+
+interface SearchedVideoIdType extends DefaultYoutubeType {
+  dtag: string;
   items: {
+    etag: string;
+    kind: string;
     id: {
       kind: string;
       videoId: string;
     };
-    title: string;
-    etag: string;
-    kind: string;
-    snippet: Omit<SnippetType, 'categoryId' | 'localized' | 'tags'>;
-    statistics: StatisticsType;
   }[];
 }
 
-export interface getSearchVideosStatisticsType {
-  items: {
-    id: string;
-    title: string;
-    etag: string;
-    kind: string;
-    statistics: StatisticsType;
-  }[];
+export type GetYoutubeVideosType = DefaultYoutubeType & YoutubeVideoItemsType;
+
+interface GetYoutubeVideoParamsType {
+  searchWord?: string;
+  token?: string;
 }
 
-export type GetPopularVideosType = DefaultYoutubeType & PopularVideosType;
-export type GetSearchVideosType = DefaultYoutubeType & SearchedVideosType;
-
-interface getPopularVideosParamsType {
-  token: string | undefined;
-}
-
-export const getPopularVideos = async ({
+export const getYoutubeVideos = async ({
   token,
-}: getPopularVideosParamsType) => {
-  const urlPageToken = token || '';
+  searchWord,
+}: GetYoutubeVideoParamsType) => {
+  let urlPageToken = (token && `pageToken=${token}`) || '';
+  let searchOrChart = 'chart=mostPopular';
+  let pageInfo;
 
-  try {
-    const { data } = await axios.get<GetPopularVideosType>(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&pageToken=${urlPageToken}&chart=mostPopular&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+  if (searchWord) {
+    const { data } = await axios.get<SearchedVideoIdType>(
+      `https://www.googleapis.com/youtube/v3/search?${urlPageToken}&q=${searchWord}&videoEmbeddable=true&type=video&maxResults=12&part=id&order=relevance&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
       {
         withCredentials: false,
       },
     );
+
+    const chart = `id=${data.items.map((item) => item.id.videoId).join(',')}`;
+    searchOrChart = chart;
+    pageInfo = {
+      nextPageToken: data.nextPageToken,
+      pageInfo: data.pageInfo,
+      prevPageToken: data.prevPageToken,
+    };
+
+    urlPageToken = ``;
+  }
+
+  try {
+    const { data } = await axios.get<GetYoutubeVideosType>(
+      `https://www.googleapis.com/youtube/v3/videos?${searchOrChart}&part=snippet,statistics&${urlPageToken}&maxResults=12&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+      {
+        withCredentials: false,
+      },
+    );
+
+    if (!searchWord) {
+      pageInfo = {
+        nextPageToken: data.nextPageToken,
+        pageInfo: data.pageInfo,
+        prevPageToken: data.prevPageToken,
+      };
+    }
     console.log(data);
-    return data;
+    const youtubeData = {
+      data,
+      pageInfo,
+    };
+    return youtubeData;
   } catch (e) {
     console.log(e);
   }
-};
-
-interface getSearchVideosParamsType {
-  searchWord: string;
-  token?: string;
-}
-
-export const getSearchVideos = async ({
-  searchWord,
-  token,
-}: getSearchVideosParamsType) => {
-  const urlPageToken = token || '';
-  const searchResponse = await axios.get<GetSearchVideosType>(
-    `https://www.googleapis.com/youtube/v3/search?&videoEmbeddable=true&type=video&part=snippet&pageToken=${urlPageToken}&q=${searchWord}&order=relevance&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-    {
-      withCredentials: false,
-    },
-  );
-
-  const searchIds = searchResponse.data.items
-    .map((item) => item.id.videoId)
-    .join(',');
-
-  const statisticsResponse = await axios.get<getSearchVideosStatisticsType>(
-    `https://www.googleapis.com/youtube/v3/videos?id=${searchIds}&part=statistics&maxResults=24&regionCode=KR&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-  );
-
-  return {
-    searchedVideos: searchResponse.data,
-    searchedStatistics: statisticsResponse.data,
-  };
 };

@@ -26,9 +26,16 @@ const colors = {
   },
 };
 
-const theme = { media, colors };
+const zIndex = {
+  modal: 6000,
+  header: 5000,
+  sideMenu: 4000,
+};
+
+const theme = { media, colors, zIndex };
 
 export type MediaType = typeof media;
 export type ColorsType = typeof colors;
+export type ZIndexType = typeof zIndex;
 
 export default theme;
