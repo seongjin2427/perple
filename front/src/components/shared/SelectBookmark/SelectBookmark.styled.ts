@@ -8,6 +8,10 @@ export const Container = styled.div`
 
 export const BookmarkWrapper = styled.div`
   width: 100%;
+  height: 15rem;
+  padding: 1rem 0;
+  margin: 1rem 0;
+  overflow: scroll;
 `;
 
 export const BookmarkLabel = styled.label`
@@ -87,9 +91,7 @@ export const CreateBookmarkDiv = styled.div<ModifyModeType>`
   }
 `;
 
-export const CreateBookmarkParagraph = styled.p`
-
-`;
+export const CreateBookmarkParagraph = styled.p``;
 
 export const CreateBookmarkInput = styled.input`
   border: 0;

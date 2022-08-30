@@ -46,11 +46,11 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
                 type="checkbox"
                 onChange={() => actions.onChangeBookmarkCheck(_id)}
               />
-              <S.Title>{bookmarkName}</S.Title>
+              <S.Title>{`${bookmarkName} (${count})`}</S.Title>
             </S.BookmarkLabel>
           ))}
-        <CreateFolder onClickCreateBookmark={actions.onClickCreateBookmark} />
       </S.BookmarkWrapper>
+      <CreateFolder onClickCreateBookmark={actions.onClickCreateBookmark} />
       <S.ConfirmButton onClick={onClickAddBookmark}>확인</S.ConfirmButton>
     </S.Container>
   );

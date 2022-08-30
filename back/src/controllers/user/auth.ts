@@ -121,11 +121,11 @@ export const getGoogleToken = async (
     let refreshToken: string | undefined;
 
     if (userInfo) {
-      refreshToken = makeRefreshToken(userInfo._id);
+      refreshToken = makeRefreshToken(userInfo._id.toString());
     } else {
       const signUpUser = await saveUser(userInformation);
       if (typeof signUpUser !== 'string') {
-        refreshToken = makeRefreshToken(signUpUser._id);
+        refreshToken = makeRefreshToken(signUpUser._id.toString());
       }
     }
 

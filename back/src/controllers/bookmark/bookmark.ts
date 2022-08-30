@@ -1,13 +1,11 @@
-import User, { IUserBookmark, IUserDocument } from '@/src/models/user';
-import Video from '@/src/models/video';
 import { RequestHandler } from 'express';
+
+import Video from '@/src/models/video';
 
 export const getAllBookmark: RequestHandler = async (req, res, next) => {
   console.log('getAllBookmark');
-  const user = await req.userInfo?.populate<IUserDocument>('bookmarks');
-  const test = await req.userInfo?.bookmarks;
-  console.log('test', test);
-  res.status(200).json({ bookmark: user?.bookmarks.bookmark, test });
+  const user = await req.userInfo?.populate('bookmarks.bookmark');
+  res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
 
 export const createBookmark: RequestHandler = async (req, res, next) => {

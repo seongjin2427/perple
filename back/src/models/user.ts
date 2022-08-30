@@ -1,35 +1,6 @@
-import { IVideoDocument } from '@/src/models/video';
 import { Schema, Document, Model, ObjectId, model } from 'mongoose';
-
-export interface IUserBookmark {
-  bookmarkName: string;
-  count: number;
-  videos: {
-    videoId: ObjectId;
-  }[];
-}
-
-export interface IUserBookmarkDocument extends IUserBookmark, Document {}
-
-interface IUserBookmarkModel extends Model<IUserBookmark> {}
-
-const userBookmarkSchema: Schema<
-  IUserBookmarkDocument,
-  IUserBookmarkDocument,
-  IUserModel
-> = new Schema({
-  bookmarkName: {
-    type: String,
-    required: true,
-  },
-  count: Number,
-  videos: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Video',
-    },
-  ],
-});
+import { IVideoDocument } from '@/src/models/video';
+import { IUserBookmark, UserBookmarkModel } from '@/src/models/userBookmark';
 
 interface IUser {
   snsId: string;
@@ -80,19 +51,8 @@ const userSchema: Schema<IUserDocument, IUserDocument, IUserModel> = new Schema(
     bookmarks: {
       bookmark: [
         {
-          bookmarkName: {
-            type: String,
-            required: true,
-          },
-          count: { type: Number, required: true },
-          videos: [
-            {
-              videosId: {
-                type: Schema.Types.ObjectId,
-                ref: 'Video',
-              },
-            },
-          ],
+          type: Schema.Types.ObjectId,
+          ref: 'UserBookmark',
         },
       ],
     },
@@ -106,14 +66,15 @@ const userSchema: Schema<IUserDocument, IUserDocument, IUserModel> = new Schema(
 );
 
 userSchema.methods.createBookmark = async function (title: string) {
-  const updatedBookmarks = [...this.bookmarks.bookmark];
-  updatedBookmarks.push({
+  console.log('methods.createBookmark');
+  const result = await UserBookmarkModel.create({
     bookmarkName: title,
     count: 0,
+    videos: [],
   });
+  await result.save();
 
-  this.bookmarks = { bookmark: updatedBookmarks };
-
+  this.bookmarks.bookmark.push(result);
   return this.save();
 };
 
@@ -121,32 +82,21 @@ userSchema.methods.addBookmark = async function (
   videoInfo: IVideoDocument,
   selectBookmarkId: string[],
 ) {
-  const updatedBookmark = [...this.bookmarks.bookmark];
+  console.log('methods.addBookmark');
 
-  const selectBookmark = selectBookmarkId.map((id: string) => {
-    return updatedBookmark.findIndex(
-      (bm) => bm._id.toString() === id.toString(),
-    );
-  });
+  await selectBookmarkId.forEach(async (id: string) => {
+    const foundBookmark = await UserBookmarkModel.findById(id);
 
-  selectBookmark.forEach((index) => {
-    const existedVideo = updatedBookmark[index].videos.findIndex(
-      (bm: { videosId: ObjectId }) => {
-        return bm.videosId.toString() === videoInfo._id.toString();
-      },
+    const existedVideo = foundBookmark?.videos.findIndex(
+      (v) => v.videoId.toString() === videoInfo._id.toString(),
     );
 
-    if (existedVideo < 0) {
-      updatedBookmark[index].videos.push({ videosId: videoInfo._id });
+    if (existedVideo! < 0) {
+      foundBookmark!.videos.push({ videoId: videoInfo._id });
+      foundBookmark!.count += 1;
+      await foundBookmark?.save();
     }
   });
-
-  const updateBookmark = {
-    bookmark: updatedBookmark,
-  };
-
-  this.bookmarks = updateBookmark;
-  this.save();
 };
 
 const User = model<IUserDocument, IUserModel>('User', userSchema);
