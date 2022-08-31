@@ -61,3 +61,23 @@ export const createBookmark = async (bookmarkTitle: string) => {
     console.log(e);
   }
 };
+
+export const modifyBookmarkNameApi = async (id: string, title: string) => {
+  try {
+    const res = await instance.put(`/bm/modify/bookmark-name`, { id, title });
+    console.log(res);
+    return res.data.message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const removeBookmarkApi = async (id: string) => {
+  try {
+    const res = await instance.delete(`/bm/remove/${id}`);
+    console.log(res);
+    return res.data.message;
+  } catch (e) {
+    console.log(e);
+  }
+};

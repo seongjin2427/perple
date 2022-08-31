@@ -37,7 +37,7 @@ const CreateFolder = ({ onClickCreateBookmark }: CreateFolderProps) => {
           modifyMode={modifyMode}
           onClick={onClickSetModifyMode}
         >
-          <S.CreateBookmarkParagraph>+ 폴더 추가</S.CreateBookmarkParagraph>
+          <S.CreateBookmarkParagraph>+ 북마크 추가</S.CreateBookmarkParagraph>
         </S.CreateBookmarkDiv>
       )}
       {modifyMode && (

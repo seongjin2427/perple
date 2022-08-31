@@ -16,21 +16,21 @@ export const SLIDE_DOWN = keyframes`
 export const DROP_DOWN = keyframes`
   0% {
     display: flex;
-    height: 0rem;
+    max-height: 0rem;
   }
   100% {
     display: flex;
-    height: 39rem;
+    max-height: 39rem;
   }
 `;
 
 export const DROP_UP = keyframes`
   0% {
     display: flex;
-    height: 39rem;
+    max-height: 39rem;
   }
   100% {
     display: none;
-    height: 0rem;
+    max-height: 0rem;
   }
 `;

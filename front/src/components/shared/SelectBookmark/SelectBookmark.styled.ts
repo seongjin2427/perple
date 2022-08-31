@@ -14,6 +14,15 @@ export const BookmarkWrapper = styled.div`
   overflow: scroll;
 `;
 
+export const BlankBookmark = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: ${({ theme }) => theme.colors.primary.hex};
+`;
+
 export const BookmarkLabel = styled.label`
   display: flex;
   background: white;

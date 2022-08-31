@@ -24,8 +24,6 @@ const isAuth = async (req: Request, res: Response, next: NextFunction) => {
   const [tokenType, tokenValue] = authHeader?.split(' ');
   const refreshToken = req.cookies['refreshToken'];
   let decodedToken;
-
-  console.log(tokenValue);
   if (tokenValue !== 'null' && tokenValue !== undefined) {
     decodedToken = verifyToken(tokenValue) as TokenType;
   }

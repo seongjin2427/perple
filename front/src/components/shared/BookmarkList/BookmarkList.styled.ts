@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components';
 import { DROP_DOWN, DROP_UP } from 'styles/keyframe';
 
 export const Container = styled.div`
+  width: 100%;
+  max-width: 60rem;
   margin-bottom: 5rem;
 `;
 
@@ -17,17 +19,12 @@ export const BookmarkListPageTitle = styled.h1`
 
 export const BookmarkBox = styled.div`
   width: 100%;
-  padding: 0.25rem;
+  padding: 0.25rem 0;
   margin-bottom: 0.25rem;
 
   & > * {
     color: ${({ theme }) => theme.colors.primary.hex};
   }
-  ${({ theme }) => css`
-    ${theme.media.tablet} {
-      /* max-width: 25rem; */
-    }
-  `}
 `;
 
 interface ToggleType {
@@ -35,7 +32,7 @@ interface ToggleType {
 }
 
 export const BookmarkTitleDiv = styled.div<ToggleType>`
-  height: 3.75rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,20 +49,47 @@ export const BookmarkTitleDiv = styled.div<ToggleType>`
     css`
       background: ${({ theme }) => theme.colors.primary.hex};
       color: white;
+      input {
+        color: white;
+      }
 
       i {
         background: white;
         color: ${({ theme }) => theme.colors.primary.hex};
       }
     `}
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      height: 3.75rem;
+    }
+  `}
 `;
 
 export const BookmarkTitle = styled.h2`
   width: 80%;
+  height: 1.125rem;
+  margin-left: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      font-size: 1.125rem;
+    }
+  `}
+`;
+
+export const BookmarkTitleInput = styled.input`
+  width: 80%;
+  height: 90%;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.primary.hex};
+  font-size: 1rem;
+  :focus {
+    outline: none;
+  }
   ${({ theme }) => css`
     ${theme.media.tablet} {
       font-size: 1.125rem;
@@ -81,39 +105,67 @@ export const BookmarkIconDiv = styled.div<ToggleType>`
   justify-content: flex-end;
 
   svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
     padding: 0.25rem;
     border-radius: 50%;
-    margin-right: 0.75rem;
+    margin-right: 0.375rem;
+    fill: rgba(${({ theme }) => theme.colors.primary.rgb}, 1);
+
+    :hover {
+      background: ${({ theme }) => theme.colors.primary.hex};
+      fill: white;
+    }
+
     ${({ toggle }) =>
       toggle &&
       css`
         background: white;
       `}
   }
+
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      width: 11.5rem;
+
+      svg {
+        width: 1.75rem;
+        height: 1.75rem;
+        padding: 0.375rem;
+        margin-right: 0.5rem;
+      }
+    }
+  `}
 `;
 
 export const BookmarkCount = styled.i`
-  width: 1.075rem;
-  height: 1.075rem;
-  background: ${({ theme }) => theme.colors.primary.hex};
-  padding: 10px;
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0.5rem;
   margin-top: -1px;
   margin-bottom: 1px;
+  border: 1px solid ${({ theme }) => theme.colors.primary.hex};
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: white;
-  font-size: 1.075rem;
+  color: ${({ theme }) => theme.colors.primary.hex};
+  font-size: 1rem;
   font-weight: bold;
   text-align: center;
+
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      width: 1.25rem;
+      height: 1.25rem;
+      padding: 0.625rem;
+      font-size: 1.25rem;
+    }
+  `}
 `;
 
 export const YoutubeCard = styled.div<ToggleType>`
-  /* height: 100%; */
   flex-direction: column;
   margin-top: -1px;
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};

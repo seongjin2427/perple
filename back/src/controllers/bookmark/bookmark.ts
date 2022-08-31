@@ -1,6 +1,16 @@
 import { RequestHandler } from 'express';
 
 import Video from '@/src/models/video';
+import { UserBookmarkModel } from '@/src/models/userBookmark';
+
+export const createBookmark: RequestHandler = async (req, res, next) => {
+  console.log('createBookmark');
+  const bookmarkTitle = req.body.bookmarkTitle;
+
+  const user = await req.userInfo?.createBookmark(bookmarkTitle);
+
+  res.status(200).json({ bookmark: user?.bookmarks.bookmark });
+};
 
 export const getAllBookmark: RequestHandler = async (req, res, next) => {
   console.log('getAllBookmark');
@@ -17,15 +27,6 @@ export const getAllBookmark: RequestHandler = async (req, res, next) => {
   } else {
     user = await req.userInfo?.populate('bookmarks.bookmark');
   }
-  res.status(200).json({ bookmark: user?.bookmarks.bookmark });
-};
-
-export const createBookmark: RequestHandler = async (req, res, next) => {
-  console.log('createBookmark');
-  const bookmarkTitle = req.body.bookmarkTitle;
-
-  const user = await req.userInfo?.createBookmark(bookmarkTitle);
-
   res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
 
@@ -62,4 +63,23 @@ export const addBookmark: RequestHandler = async (req, res, next) => {
     await req.userInfo?.addBookmark(result, selectBookmarkId);
   }
   res.status(200).json({ message: '등록 성공!' });
+};
+
+export const modifyTitleName: RequestHandler = async (req, res, next) => {
+  const { id, title } = req.body;
+  const result = await UserBookmarkModel.findByIdAndUpdate(id, {
+    $set: {
+      bookmarkName: title,
+    },
+  });
+  res.status(200).json({ message: '업데이트 완료!' });
+};
+
+export const removeBookmark: RequestHandler = async (req, res, next) => {
+  console.log('removeBookmark');
+  const id = req.params.bookmarkId;
+  console.log(id);
+  const result = await UserBookmarkModel.findByIdAndRemove(id);
+  console.log(result);
+  res.status(200).json({ message: '삭제 완료!' });
 };

@@ -17,10 +17,11 @@ export interface BookmarkInfoType {
   thumbnailUrl: string;
 }
 
-interface UseBookmarkActionType {
+export interface UseBookmarkActionType {
   onChangeBookmarkCheck: (idx: string) => void;
   onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
   onClickCreateBookmark: (bookmark: string) => void;
+  onClickRemoveBookmark: (id: string) => void;
 }
 
 const useBookmark = (
@@ -56,6 +57,11 @@ const useBookmark = (
     onClickCreateBookmark: async function (bookmarkTitle: string) {
       await createBookmark(bookmarkTitle);
       await getBookmarkList();
+    },
+    onClickRemoveBookmark: async function (id: string) {
+      const removedBookmarkList = bookmarkList.filter((bm) => bm._id !== id);
+      setBookmarkList(removedBookmarkList);
+      await getBookmarkList('true');
     },
   };
 
