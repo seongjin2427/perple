@@ -36,7 +36,8 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
   return (
     <S.Container>
       <S.BookmarkWrapper>
-        {bookmarkList.length > 0 &&
+        {bookmarkList &&
+          bookmarkList.length > 0 &&
           bookmarkList.map(({ bookmarkName, count, _id }) => (
             <S.BookmarkLabel key={_id} htmlFor={_id}>
               <S.BookmarkCheckbox
@@ -48,10 +49,8 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
               <S.Title>{`${bookmarkName} (${count})`}</S.Title>
             </S.BookmarkLabel>
           ))}
-        {bookmarkList.length === 0 && (
-          <S.BlankBookmark>
-            북마크가 없어요!
-          </S.BlankBookmark>
+        {bookmarkList && bookmarkList.length === 0 && (
+          <S.BlankBookmark>북마크가 없어요!</S.BlankBookmark>
         )}
       </S.BookmarkWrapper>
       <CreateFolder onClickCreateBookmark={actions.onClickCreateBookmark} />

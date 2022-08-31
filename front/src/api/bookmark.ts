@@ -81,3 +81,14 @@ export const removeBookmarkApi = async (id: string) => {
     console.log(e);
   }
 };
+
+export const removeYoutubeApi = async (bookmarkId: string, videoId: string) => {
+  try {
+    const { data } = await instance.delete(
+      `/bm/remove-youtube/${bookmarkId}/${videoId}`,
+    );
+    return data.message;
+  } catch (e) {
+    console.log(e);
+  }
+};

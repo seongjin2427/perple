@@ -8,7 +8,6 @@ import React, {
   useState,
 } from 'react';
 
-import { modifyBookmarkNameApi, removeBookmarkApi } from 'api/bookmark';
 import useBookmark, {
   BookmarkInfoType,
   UseBookmarkActionType,
@@ -16,6 +15,7 @@ import useBookmark, {
 import * as S from './BookmarkList.styled';
 import IconSet from 'components/shared/IconSet';
 import CreateFolder from 'components/shared/CreateFolder';
+import useModal from 'hooks/useModal';
 
 interface BookmarkContextType {
   toggle: boolean;
@@ -48,7 +48,7 @@ interface BookmarkProps {
     bookmarkName: string;
     count: number;
     videos: {
-      videoId: BookmarkInfoType;
+      videoId: BookmarkInfoType & { _id: string };
     }[];
   };
   actions?: UseBookmarkActionType;
@@ -77,15 +77,13 @@ const BookmarkBox = ({ bookmark, actions }: BookmarkProps) => {
     <BookmarkBoxProvider>
       <S.BookmarkBox>
         <BookmarkTitle bookmark={bookmark} actions={actions} />
-        <BookmarkCard bookmark={bookmark} />
+        <BookmarkCard bookmark={bookmark} actions={actions} />
       </S.BookmarkBox>
     </BookmarkBoxProvider>
   );
 };
 
-interface BookmarkTitleProps extends BookmarkProps {}
-
-const BookmarkTitle = ({ bookmark, actions }: BookmarkTitleProps) => {
+const BookmarkTitle = ({ bookmark, actions }: BookmarkProps) => {
   const { bookmarkName, count, _id } = bookmark;
   const { toggle, setToggle } = useContext(BookmarkContext);
 
@@ -119,21 +117,17 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkTitleProps) => {
   const modifyBookmarkName = useCallback(
     async (e: MouseEvent) => {
       stopPropa(e);
-      const res = await modifyBookmarkNameApi(_id, bookmarkNameState);
-      alert(res);
+      alert(await actions?.onClickModifyBookmarkTitle(_id, bookmarkNameState));
       setModifyMode(!modifyMode);
     },
-    [_id, bookmarkNameState, modifyMode, stopPropa],
+    [_id, bookmarkNameState, modifyMode, stopPropa, actions],
   );
 
-  const DeleteBookmark = useCallback(
+  const removeBookmark = useCallback(
     async (e: MouseEvent) => {
       stopPropa(e);
-      if (window.confirm(`${bookmarkNameState}을/를 삭제하시겠습니까?`)) {
-        const res = await removeBookmarkApi(_id);
-        actions!.onClickRemoveBookmark(_id);
-        alert(res);
-      }
+      if (window.confirm(`${bookmarkNameState}을/를 삭제하시겠습니까?`))
+        alert(await actions!.onClickRemoveBookmark(_id));
     },
     [bookmarkNameState, _id, stopPropa, actions],
   );
@@ -157,7 +151,7 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkTitleProps) => {
           <S.BookmarkTitle>{bookmarkNameState}</S.BookmarkTitle>
           <S.BookmarkIconDiv toggle={toggle}>
             <IconSet iconType="BallpenIcon" onClick={convertToModifyMode} />
-            <IconSet iconType="BinIcon" onClick={DeleteBookmark} />
+            <IconSet iconType="BinIcon" onClick={removeBookmark} />
             <S.BookmarkCount>{count}</S.BookmarkCount>
           </S.BookmarkIconDiv>
         </>
@@ -180,17 +174,61 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkTitleProps) => {
   );
 };
 
-const BookmarkCard = ({ bookmark }: BookmarkProps) => {
-  const { videos } = bookmark;
+const BookmarkCard = ({ bookmark, actions }: BookmarkProps) => {
   const { toggle } = useContext(BookmarkContext);
+  const { videos, bookmarkName } = bookmark;
+  const [videoIdState, setVideoIdState] = useState<string>('');
+  const [, { open }, Modal] = useModal({
+    title: bookmarkName,
+  });
+
+  const activeModal = useCallback(
+    (v: BookmarkInfoType, id: string) => {
+      open({ sTitle: v.title });
+      setVideoIdState(id);
+    },
+    [open],
+  );
+
+  const removeYoutube = useCallback(
+    async (
+      e: MouseEvent,
+      bookmarkId: string,
+      video: BookmarkInfoType & { _id: string },
+    ) => {
+      e.stopPropagation();
+      if (window.confirm(`${video.title}을/를 삭제하시겠습니까?`)) {
+        const res = await actions?.onClickRemoveVideo(bookmarkId, video._id);
+        alert(res);
+      }
+    },
+    [actions],
+  );
 
   return (
     <S.YoutubeCard toggle={toggle}>
+      <Modal>
+        {videoIdState && (
+          <S.VideoIframe
+            title="영상"
+            src={`//www.youtube.com/embed/${videoIdState}`}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        )}
+      </Modal>
       {videos.length > 0 &&
         videos.map((v, idx) => (
           <S.YoutubeContent key={v.videoId.videoId + idx.toString()}>
-            <S.YoutubeThumbnailDiv>
+            <S.YoutubeThumbnailDiv
+              onClick={() => activeModal(v.videoId, v.videoId.videoId)}
+            >
               <S.YoutubeThumbnail src={v.videoId.thumbnailUrl} />
+              <IconSet
+                iconType="CrossIcon"
+                onClick={(e) => removeYoutube(e, bookmark._id, v.videoId)}
+              />
             </S.YoutubeThumbnailDiv>
             <S.YoutubeTextArea>
               <S.YoutubeTitle>{v.videoId.title}</S.YoutubeTitle>

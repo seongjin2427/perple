@@ -4,6 +4,7 @@ import {
   addBookmark,
   modifyTitleName,
   removeBookmark,
+  removeYoutube,
 } from '@/src/controllers/bookmark/bookmark';
 import isAuth from '@/src/utils/is-auth';
 import { Router } from 'express';
@@ -24,5 +25,8 @@ router.put('/modify/bookmark-name', isAuth, modifyTitleName);
 
 // 북마크 삭제하기
 router.delete('/remove/:bookmarkId', isAuth, removeBookmark);
+
+// 북마크 내 유튜브 영상 삭제하기
+router.delete('/remove-youtube/:bookmarkId/:videoId', isAuth, removeYoutube);
 
 export default router;

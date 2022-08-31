@@ -66,20 +66,32 @@ export const addBookmark: RequestHandler = async (req, res, next) => {
 };
 
 export const modifyTitleName: RequestHandler = async (req, res, next) => {
+  console.log('modifyTitleName');
   const { id, title } = req.body;
   const result = await UserBookmarkModel.findByIdAndUpdate(id, {
     $set: {
       bookmarkName: title,
     },
   });
+  console.log(result);
   res.status(200).json({ message: '업데이트 완료!' });
 };
 
 export const removeBookmark: RequestHandler = async (req, res, next) => {
   console.log('removeBookmark');
+
   const id = req.params.bookmarkId;
-  console.log(id);
-  const result = await UserBookmarkModel.findByIdAndRemove(id);
-  console.log(result);
+  await req.userInfo?.removeBookmark(id);
+
+  res.status(200).json({ message: '삭제 완료!' });
+};
+
+export const removeYoutube: RequestHandler = async (req, res, next) => {
+  console.log('removeYoutube');
+  const bookmarkId = req.params.bookmarkId;
+  const videoId = req.params.videoId;
+  console.log('bookmarkId', bookmarkId);
+  console.log('videoId', videoId);
+  await req.userInfo?.removeYoutube(bookmarkId, videoId);
   res.status(200).json({ message: '삭제 완료!' });
 };

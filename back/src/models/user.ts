@@ -1,6 +1,7 @@
 import { Schema, Document, Model, ObjectId, model } from 'mongoose';
-import { IVideoDocument } from '@/src/models/video';
+
 import { IUserBookmark, UserBookmarkModel } from '@/src/models/userBookmark';
+import Video, { IVideoDocument } from '@/src/models/video';
 
 interface IUser {
   snsId: string;
@@ -17,12 +18,13 @@ interface IUser {
 export interface IUserDocument extends IUser, Document {
   createBookmark(title: string): IUserDocument;
   addBookmark(videoInfo: IVideoDocument, selectBookmarkId: string): string;
-  test(test: string): void;
+  removeBookmark(bookmarkId: string): void;
+  removeYoutube(bookmarkId: string, videoId: string): void;
 }
 
 interface IUserModel extends Model<IUserDocument> {}
 
-const userSchema: Schema<IUserDocument, IUserDocument, IUserModel> = new Schema(
+const userSchema: Schema<IUserDocument, {}, IUserModel> = new Schema(
   {
     snsId: {
       type: String,
@@ -71,6 +73,7 @@ userSchema.methods.createBookmark = async function (title: string) {
     bookmarkName: title,
     count: 0,
     videos: [],
+    userId: this._id,
   });
   await result.save();
 
@@ -97,6 +100,32 @@ userSchema.methods.addBookmark = async function (
       await foundBookmark?.save();
     }
   });
+};
+
+userSchema.methods.removeBookmark = async function (bookmarkId: string) {
+  const updatedBookmark = this.bookmarks.bookmark.filter(
+    (bm: ObjectId) => bm.toString() !== bookmarkId.toString(),
+  );
+  this.bookmarks = { bookmark: updatedBookmark };
+  this.save();
+
+  await UserBookmarkModel.findByIdAndRemove(bookmarkId);
+};
+
+userSchema.methods.removeYoutube = async function (
+  bookmarkId: string,
+  videoId: string,
+) {
+  const foundBookmark = await UserBookmarkModel.findById(bookmarkId);
+  const updateBookmark = foundBookmark?.videos.filter(
+    (vId) => vId.videoId.toString() !== videoId.toString(),
+  );
+  foundBookmark!.count -= 1;
+
+  if (updateBookmark) foundBookmark!.videos = updateBookmark;
+  foundBookmark!.save();
+
+  await Video.findByIdAndRemove(videoId);
 };
 
 const User = model<IUserDocument, IUserModel>('User', userSchema);

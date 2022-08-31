@@ -9,6 +9,7 @@ interface ModalParamsProps {
 export interface ModalActionsType {
   open: ({ sTitle, item }: OpenModalParamsType) => void;
   close: () => void;
+  getVideoInfo: () => YoutubeVideosItemType | undefined;
 }
 
 export type ReturnComponentType = ({
@@ -37,6 +38,11 @@ const useModal = ({
   const [videoInfo, setVideoInfo] = useState<YoutubeVideosItemType>();
 
   const actions: ModalActionsType = {
+    /**
+     *
+     * @param sTitle 타이틀 아래 작은 소제목
+     * @param item <SelectBookmark> 컴포넌트에서 북마크에 유튜브 정보를 보내기 위함
+     */
     open: function ({ sTitle, item }: OpenModalParamsType) {
       setToggle(true);
       if (sTitle) setSubTitle(sTitle);
@@ -44,6 +50,9 @@ const useModal = ({
     },
     close: function () {
       setToggle(false);
+    },
+    getVideoInfo: function () {
+      return videoInfo;
     },
   };
 

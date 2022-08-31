@@ -1,6 +1,7 @@
 import { Schema, Document, Model, ObjectId, model } from 'mongoose';
 
 export interface IUserBookmark {
+  userId: ObjectId;
   bookmarkName: string;
   count: number;
   videos: {
@@ -17,6 +18,10 @@ const userBookmarkSchema: Schema<
   IUserBookmarkDocument,
   IUserBookmarkModel
 > = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   bookmarkName: {
     type: String,
     required: true,

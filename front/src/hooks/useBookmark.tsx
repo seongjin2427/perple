@@ -7,6 +7,9 @@ import {
   getAllBookmark,
   addBookmark,
   BookmarkType,
+  removeBookmarkApi,
+  modifyBookmarkNameApi,
+  removeYoutubeApi,
 } from 'api/bookmark';
 
 export interface BookmarkInfoType {
@@ -22,6 +25,11 @@ export interface UseBookmarkActionType {
   onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
   onClickCreateBookmark: (bookmark: string) => void;
   onClickRemoveBookmark: (id: string) => void;
+  onClickModifyBookmarkTitle: (
+    bookmarkId: string,
+    title: string,
+  ) => Promise<string>;
+  onClickRemoveVideo: (bookmarkId: string, videoId: string) => Promise<string>;
 }
 
 const useBookmark = (
@@ -59,9 +67,25 @@ const useBookmark = (
       await getBookmarkList();
     },
     onClickRemoveBookmark: async function (id: string) {
-      const removedBookmarkList = bookmarkList.filter((bm) => bm._id !== id);
-      setBookmarkList(removedBookmarkList);
+      const res = await removeBookmarkApi(id);
+      if (res) {
+        const removedBookmarkList = bookmarkList.filter((bm) => bm._id !== id);
+        setBookmarkList(removedBookmarkList);
+      }
       await getBookmarkList('true');
+      return res;
+    },
+    onClickModifyBookmarkTitle: async function (
+      bookmarkId: string,
+      title: string,
+    ) {
+      const res = await modifyBookmarkNameApi(bookmarkId, title);
+      return res;
+    },
+    onClickRemoveVideo: async function (bookmarkId: string, id: string) {
+      const res = await removeYoutubeApi(bookmarkId, id);
+      if (res) await getBookmarkList('true');
+      return res;
     },
   };
 

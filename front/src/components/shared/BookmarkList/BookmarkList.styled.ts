@@ -67,15 +67,16 @@ export const BookmarkTitleDiv = styled.div<ToggleType>`
 
 export const BookmarkTitle = styled.h2`
   width: 80%;
-  height: 1.125rem;
+  height: 1rem;
   margin-left: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
+  
   ${({ theme }) => css`
-    ${theme.media.tablet} {
-      font-size: 1.125rem;
+  ${theme.media.tablet} {
+    font-size: 1.125rem;
+    height: 1.375rem;
     }
   `}
 `;
@@ -188,7 +189,21 @@ export const YoutubeCard = styled.div<ToggleType>`
   `}
 `;
 
+export const VideoIframe = styled.iframe`
+  width: 100%;
+  min-width: 17.5rem;
+  aspect-ratio: 2 / 1.5;
+  object-fit: contain;
+
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      width: 40rem;
+    }
+  `}
+`;
+
 export const YoutubeContent = styled.div`
+  position: relative;
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary.hex};
 
   :last-child {
@@ -200,13 +215,25 @@ export const YoutubeContent = styled.div`
       display: flex;
     }
   `}
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    top: 0.5rem;
+    left: 0.5rem;
+    position: absolute;
+    fill: ${({ theme }) => theme.colors.error.hex};
+  }
 `;
 
 export const YoutubeThumbnailDiv = styled.div`
+  position: relative;
+  cursor: pointer;
   ${({ theme }) => theme.media.tablet} {
     width: 25%;
   }
 `;
+
 export const YoutubeThumbnail = styled.img`
   width: 100%;
   object-fit: contain;
