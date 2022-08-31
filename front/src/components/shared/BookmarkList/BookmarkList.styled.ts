@@ -35,12 +35,12 @@ interface ToggleType {
 }
 
 export const BookmarkTitleDiv = styled.div<ToggleType>`
+  height: 3.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3.75rem;
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};
-  padding: 0 1.25rem;
+  padding: 0 1rem 0 0.75rem;
   cursor: pointer;
 
   :hover {
@@ -95,14 +95,19 @@ export const BookmarkIconDiv = styled.div<ToggleType>`
 `;
 
 export const BookmarkCount = styled.i`
-  width: 1rem;
-  height: 1rem;
+  width: 1.075rem;
+  height: 1.075rem;
   background: ${({ theme }) => theme.colors.primary.hex};
   padding: 10px;
+  margin-top: -1px;
+  margin-bottom: 1px;
   border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   color: white;
-  font-size: 1rem;
+  font-size: 1.075rem;
   font-weight: bold;
   text-align: center;
 `;
