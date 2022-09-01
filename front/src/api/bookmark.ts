@@ -1,18 +1,34 @@
 import instance from 'api/instance';
 import { BookmarkInfoType } from 'hooks/useBookmark';
 
-interface getAllBookmarkResponseType {
-  bookmark: {
-    bookmarkName: string;
-    _id: string;
-    count: number;
+export interface BookmarkVideoInfoType {
+  _id: string;
+  videoId: string;
+  channelName: string;
+  description: string;
+  thumbnailUrl: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookmarkType {
+  bookmarkName: string;
+  _id: string;
+  count: number;
+  videos: {
+    videoId: BookmarkVideoInfoType;
   }[];
 }
 
-export const getAllBookmark = async () => {
+interface getAllBookmarkResponseType {
+  bookmark: BookmarkType[];
+}
+
+export const getAllBookmark = async (option: string) => {
   try {
     const { data } = await instance.get<getAllBookmarkResponseType>(
-      '/bm/bookmark',
+      `/bm/bookmark/?deep=${option}`,
     );
     console.log('getAllBookmark', data);
     return data;
@@ -41,6 +57,37 @@ export const createBookmark = async (bookmarkTitle: string) => {
   try {
     const res = await instance.post('/bm/create/bookmark', { bookmarkTitle });
     console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const modifyBookmarkNameApi = async (id: string, title: string) => {
+  try {
+    const res = await instance.put(`/bm/modify/bookmark-name`, { id, title });
+    console.log(res);
+    return res.data.message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const removeBookmarkApi = async (id: string) => {
+  try {
+    const res = await instance.delete(`/bm/remove/${id}`);
+    console.log(res);
+    return res.data.message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const removeYoutubeApi = async (bookmarkId: string, videoId: string) => {
+  try {
+    const { data } = await instance.delete(
+      `/bm/remove-youtube/${bookmarkId}/${videoId}`,
+    );
+    return data.message;
   } catch (e) {
     console.log(e);
   }

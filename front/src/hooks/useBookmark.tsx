@@ -1,7 +1,16 @@
-import { createBookmark, getAllBookmark, addBookmark } from 'api/bookmark';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import { RootState } from 'store/store';
+import {
+  createBookmark,
+  getAllBookmark,
+  addBookmark,
+  BookmarkType,
+  removeBookmarkApi,
+  modifyBookmarkNameApi,
+  removeYoutubeApi,
+} from 'api/bookmark';
 
 export interface BookmarkInfoType {
   videoId: string;
@@ -11,33 +20,39 @@ export interface BookmarkInfoType {
   thumbnailUrl: string;
 }
 
-export type BookmarkType = {
-  bookmarkName: string;
-  _id: string;
-  count: number;
-}[];
-
-interface UseBookmarkActionType {
+export interface UseBookmarkActionType {
+  fetchingBookmark: (options: string) => void;
   onChangeBookmarkCheck: (idx: string) => void;
   onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
   onClickCreateBookmark: (bookmark: string) => void;
+  onClickRemoveBookmark: (id: string) => void;
+  onClickModifyBookmarkTitle: (
+    bookmarkId: string,
+    title: string,
+  ) => Promise<string>;
+  onClickRemoveVideo: (bookmarkId: string, videoId: string) => Promise<string>;
 }
 
-const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
+const useBookmark = (
+  options?: 'true',
+): [BookmarkType[], UseBookmarkActionType] => {
   const isAuth = useSelector(({ global }: RootState) => global.isLogin);
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType>([]);
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
   const [addBookmarkList, setAddBookmarkList] = useState<string[]>([]);
 
-  const getBookmarkList = async () => {
-    const fetchedBookmark = await getAllBookmark();
+  const getBookmarkList = async (option?: string) => {
+    const fetchedBookmark = await getAllBookmark(option || '');
     if (fetchedBookmark) setBookmarkList(fetchedBookmark.bookmark);
   };
 
   useEffect(() => {
-    if (isAuth) getBookmarkList();
-  }, [isAuth]);
+    if (isAuth) getBookmarkList(options);
+  }, [isAuth, options]);
 
   const actions = {
+    fetchingBookmark: async function (options: string) {
+      getBookmarkList(options);
+    },
     onChangeBookmarkCheck: function (idx: string) {
       const selectedId = bookmarkList.filter(({ _id }) => _id === idx)[0]._id;
 
@@ -54,6 +69,28 @@ const useBookmark = (): [BookmarkType, UseBookmarkActionType] => {
     onClickCreateBookmark: async function (bookmarkTitle: string) {
       await createBookmark(bookmarkTitle);
       await getBookmarkList();
+    },
+    onClickRemoveBookmark: async function (id: string) {
+      const res = await removeBookmarkApi(id);
+      if (res) {
+        const removedBookmarkList = bookmarkList.filter((bm) => bm._id !== id);
+        setBookmarkList(removedBookmarkList);
+      }
+      await getBookmarkList('true');
+      return res;
+    },
+    onClickModifyBookmarkTitle: async function (
+      bookmarkId: string,
+      title: string,
+    ) {
+      const res = await modifyBookmarkNameApi(bookmarkId, title);
+      await getBookmarkList('true');
+      return res;
+    },
+    onClickRemoveVideo: async function (bookmarkId: string, id: string) {
+      const res = await removeYoutubeApi(bookmarkId, id);
+      if (res) await getBookmarkList('true');
+      return res;
     },
   };
 

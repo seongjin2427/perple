@@ -9,19 +9,20 @@ export const Container = styled.div`
 export const Header = styled.header``;
 
 export const MainWrapper = styled.div`
-  max-width: 100%;
-  min-height: 90vh;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
   padding-top: calc(${HEADER_HEIGHT} + 8px);
 
   ${({ theme }) => theme.media.tablet} {
-    padding: 12px;
+    padding: 0 12px;
     padding-top: calc(${HEADER_HEIGHT} + 12px);
   }
 
   ${({ theme }) => theme.media.desktop} {
     margin: 0 auto;
-    padding: 24px;
+    padding: 0 24px;
     padding-top: calc(${HEADER_HEIGHT} + 24px);
   }
 `;

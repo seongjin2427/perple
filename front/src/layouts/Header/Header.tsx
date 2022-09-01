@@ -31,22 +31,16 @@ const Header = () => {
   const loginFunction = useCallback(async () => {
     if (!isAuth) {
       try {
-        const { data, status } = await instance.post(
+        const { data } = await instance.post(
           'http://localhost:8080/auth/token',
-          {},
-          { withCredentials: true },
         );
-        console.log('status', status);
 
-        console.log(data);
-
-        if (data.accessToken) {
+        const accessToken = localStorage.getItem('Authorization');
+        if (data.accessToken && accessToken) {
           localStorage.setItem('Authorization', data.accessToken);
           dispatch(userInfoSet(data.userInfo));
           dispatch(userLogin());
-        }
-        const accessToken = localStorage.getItem('Authorization');
-        if (!accessToken) {
+        } else {
           dispatch(userLogout());
           loginFunction();
         }
@@ -61,15 +55,25 @@ const Header = () => {
     loginFunction();
   }, [loginFunction]);
 
-  const [, actions, Modal] = useSecondModal({
+  const [, , Modal] = useSecondModal({
     title: '로그인',
     component: () => <LoginComponent />,
   });
 
+  const moveHome = useCallback(() => {
+    navigate('/');
+    dispatch(toggleSideMenu(false));
+  }, [navigate, dispatch]);
+
+  const onClickToggleSideMenu = useCallback(
+    () => dispatch(toggleSideMenu(!sideMenu)),
+    [dispatch, sideMenu],
+  );
+
   return (
     <S.Container>
       <Modal />
-      <S.LogoDiv onClick={() => navigate('/')} />
+      <S.LogoDiv onClick={moveHome} />
       <S.SearchDiv>
         <SearchForm />
       </S.SearchDiv>
@@ -89,7 +93,7 @@ const Header = () => {
           )}
         </S.HeaderMenuUl>
       </S.HeaderMenuDiv>
-      <S.MenuButton onClick={() => dispatch(toggleSideMenu(!sideMenu))}>
+      <S.MenuButton onClick={onClickToggleSideMenu}>
         <HamburgerButton width={50} toggle={sideMenu} />
       </S.MenuButton>
       <SideMenu active={sideMenu} />

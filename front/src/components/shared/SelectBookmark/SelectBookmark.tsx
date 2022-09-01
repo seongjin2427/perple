@@ -11,7 +11,7 @@ interface SelectBookmarkProps {
 }
 
 const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
-  const [bookmark, actions] = useBookmark();
+  const [bookmarkList, actions] = useBookmark();
 
   const onClickAddBookmark = useCallback(async () => {
     if (item) {
@@ -36,19 +36,29 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
   return (
     <S.Container>
       <S.BookmarkWrapper>
-        {bookmark &&
-          bookmark.length > 0 &&
-          bookmark.map(({ bookmarkName, count, _id }) => (
+        {bookmarkList &&
+          bookmarkList.length > 0 &&
+          bookmarkList.map(({ bookmarkName, count, _id, videos }) => (
             <S.BookmarkLabel key={_id} htmlFor={_id}>
               <S.BookmarkCheckbox
                 id={_id}
                 name="bookmark"
                 type="checkbox"
                 onChange={() => actions.onChangeBookmarkCheck(_id)}
+                disabled={
+                  videos.findIndex((v) => v.videoId.videoId === item?.id) >= 0
+                }
+                checked={
+                  videos.findIndex((v) => v.videoId.videoId === item?.id) >=
+                    0 || undefined
+                }
               />
               <S.Title>{`${bookmarkName} (${count})`}</S.Title>
             </S.BookmarkLabel>
           ))}
+        {bookmarkList && bookmarkList.length === 0 && (
+          <S.BlankBookmark>북마크가 없어요!</S.BlankBookmark>
+        )}
       </S.BookmarkWrapper>
       <CreateFolder onClickCreateBookmark={actions.onClickCreateBookmark} />
       <S.ConfirmButton onClick={onClickAddBookmark}>확인</S.ConfirmButton>

@@ -1,6 +1,7 @@
 import { Schema, Document, Model, ObjectId, model } from 'mongoose';
 
 export interface IUserBookmark {
+  userId: ObjectId;
   bookmarkName: string;
   count: number;
   videos: {
@@ -8,15 +9,21 @@ export interface IUserBookmark {
   }[];
 }
 
-export interface IUserBookmarkDocument extends IUserBookmark, Document {}
+export interface IUserBookmarkDocument extends IUserBookmark, Document {
+  filterBookmarkDontHaveVideo: (videoId: string) => IUserBookmarkDocument[];
+}
 
-interface IUserBookmarkModel extends Model<IUserBookmark> {}
+interface IUserBookmarkModel extends Model<IUserBookmarkDocument> {}
 
 const userBookmarkSchema: Schema<
   IUserBookmarkDocument,
-  IUserBookmarkDocument,
+  {},
   IUserBookmarkModel
 > = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   bookmarkName: {
     type: String,
     required: true,
@@ -31,6 +38,15 @@ const userBookmarkSchema: Schema<
     },
   ],
 });
+
+userBookmarkSchema.methods.filterBookmarkDontHaveVideo = async function (
+  videoId: string,
+) {
+  const filteredBookmarks = this.find({
+    videos: { $nin: videoId },
+  });
+  console.log('filteredBookmarks', filteredBookmarks);
+};
 
 export const UserBookmarkModel = model<
   IUserBookmarkDocument,

@@ -23,7 +23,6 @@ export const getToken = async (
     return res.redirect('/');
   }
   try {
-    console.log('clientRefreshToken', clientRefreshToken);
     const { userId, message } = verifyToken(
       clientRefreshToken,
     ) as RefreshTokenType;
