@@ -117,10 +117,13 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkProps) => {
   const modifyBookmarkName = useCallback(
     async (e: MouseEvent) => {
       stopPropa(e);
-      alert(await actions?.onClickModifyBookmarkTitle(_id, bookmarkNameState));
+      if (bookmarkNameState !== bookmark.bookmarkName)
+        alert(
+          await actions?.onClickModifyBookmarkTitle(_id, bookmarkNameState),
+        );
       setModifyMode(!modifyMode);
     },
-    [_id, bookmarkNameState, modifyMode, stopPropa, actions],
+    [_id, bookmark, bookmarkNameState, modifyMode, stopPropa, actions],
   );
 
   const removeBookmark = useCallback(
@@ -133,13 +136,12 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkProps) => {
   );
 
   const cancelModifyMode = useCallback(
-    (e: MouseEvent) => {
+    async (e: MouseEvent) => {
       stopPropa(e);
-      setBookmarkNameState(bookmark.bookmarkName);
       setToggle(false);
       setModifyMode(!modifyMode);
     },
-    [modifyMode, bookmark, setToggle, stopPropa],
+    [modifyMode, setToggle, stopPropa],
   );
 
   return (
@@ -218,7 +220,8 @@ const BookmarkCard = ({ bookmark, actions }: BookmarkProps) => {
           />
         )}
       </Modal>
-      {videos.length > 0 &&
+      {videos &&
+        videos.length > 0 &&
         videos.map((v, idx) => (
           <S.YoutubeContent key={v.videoId.videoId + idx.toString()}>
             <S.YoutubeThumbnailDiv

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model, ObjectId } from 'mongoose';
 
 interface IVideo {
   title: string;

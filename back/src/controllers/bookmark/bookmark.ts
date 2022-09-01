@@ -25,7 +25,14 @@ export const getAllBookmark: RequestHandler = async (req, res, next) => {
       },
     });
   } else {
-    user = await req.userInfo?.populate('bookmarks.bookmark');
+    user = await req.userInfo?.populate({
+      path: 'bookmarks.bookmark',
+      populate: {
+        path: 'videos.videoId',
+        model: Video,
+        select: 'videoId',
+      },
+    });
   }
   res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
@@ -38,19 +45,7 @@ export const addBookmark: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ message: '북마크를 선택하세요!' });
   }
 
-  const title = req.body.bookmarkInfo.title;
-  const channelName = req.body.bookmarkInfo.channelName;
-  const description = req.body.bookmarkInfo.description;
   const videoId = req.body.bookmarkInfo.videoId;
-  const thumbnailUrl = req.body.bookmarkInfo.thumbnailUrl;
-  const video = new Video({
-    title,
-    channelName,
-    description,
-    videoId,
-    thumbnailUrl,
-    userId: req.userInfo,
-  });
 
   const existedVideo = await Video.findOne({
     videoId,
@@ -59,10 +54,30 @@ export const addBookmark: RequestHandler = async (req, res, next) => {
   if (existedVideo) {
     await req.userInfo?.addBookmark(existedVideo, selectBookmarkId);
   } else {
-    const result = await video.save();
-    await req.userInfo?.addBookmark(result, selectBookmarkId);
+    const title = req.body.bookmarkInfo.title;
+    const channelName = req.body.bookmarkInfo.channelName;
+    const description = req.body.bookmarkInfo.description;
+    const thumbnailUrl = req.body.bookmarkInfo.thumbnailUrl;
+    const video = new Video({
+      videoId,
+      title,
+      channelName,
+      description,
+      thumbnailUrl,
+    });
+    await video.save();
+    await req.userInfo?.addBookmark(video, selectBookmarkId);
   }
-  res.status(200).json({ message: '등록 성공!' });
+  return res.status(200).json({ message: '성공!' });
+};
+
+export const removeBookmark: RequestHandler = async (req, res, next) => {
+  console.log('removeBookmark');
+
+  const id = req.params.bookmarkId;
+  await req.userInfo?.removeBookmark(id);
+
+  res.status(200).json({ message: '삭제 완료!' });
 };
 
 export const modifyTitleName: RequestHandler = async (req, res, next) => {
@@ -77,21 +92,13 @@ export const modifyTitleName: RequestHandler = async (req, res, next) => {
   res.status(200).json({ message: '업데이트 완료!' });
 };
 
-export const removeBookmark: RequestHandler = async (req, res, next) => {
-  console.log('removeBookmark');
-
-  const id = req.params.bookmarkId;
-  await req.userInfo?.removeBookmark(id);
-
-  res.status(200).json({ message: '삭제 완료!' });
-};
-
 export const removeYoutube: RequestHandler = async (req, res, next) => {
   console.log('removeYoutube');
+
   const bookmarkId = req.params.bookmarkId;
   const videoId = req.params.videoId;
-  console.log('bookmarkId', bookmarkId);
-  console.log('videoId', videoId);
+
   await req.userInfo?.removeYoutube(bookmarkId, videoId);
+
   res.status(200).json({ message: '삭제 완료!' });
 };

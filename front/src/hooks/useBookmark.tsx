@@ -21,6 +21,7 @@ export interface BookmarkInfoType {
 }
 
 export interface UseBookmarkActionType {
+  fetchingBookmark: (options: string) => void;
   onChangeBookmarkCheck: (idx: string) => void;
   onClickConfirmAddBookmark: (videoInfo: BookmarkInfoType) => void;
   onClickCreateBookmark: (bookmark: string) => void;
@@ -49,6 +50,9 @@ const useBookmark = (
   }, [isAuth, options]);
 
   const actions = {
+    fetchingBookmark: async function (options: string) {
+      getBookmarkList(options);
+    },
     onChangeBookmarkCheck: function (idx: string) {
       const selectedId = bookmarkList.filter(({ _id }) => _id === idx)[0]._id;
 
@@ -80,6 +84,7 @@ const useBookmark = (
       title: string,
     ) {
       const res = await modifyBookmarkNameApi(bookmarkId, title);
+      await getBookmarkList('true');
       return res;
     },
     onClickRemoveVideo: async function (bookmarkId: string, id: string) {

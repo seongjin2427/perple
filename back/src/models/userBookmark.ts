@@ -9,13 +9,15 @@ export interface IUserBookmark {
   }[];
 }
 
-export interface IUserBookmarkDocument extends IUserBookmark, Document {}
+export interface IUserBookmarkDocument extends IUserBookmark, Document {
+  filterBookmarkDontHaveVideo: (videoId: string) => IUserBookmarkDocument[];
+}
 
-interface IUserBookmarkModel extends Model<IUserBookmark> {}
+interface IUserBookmarkModel extends Model<IUserBookmarkDocument> {}
 
 const userBookmarkSchema: Schema<
   IUserBookmarkDocument,
-  IUserBookmarkDocument,
+  {},
   IUserBookmarkModel
 > = new Schema({
   userId: {
@@ -36,6 +38,15 @@ const userBookmarkSchema: Schema<
     },
   ],
 });
+
+userBookmarkSchema.methods.filterBookmarkDontHaveVideo = async function (
+  videoId: string,
+) {
+  const filteredBookmarks = this.find({
+    videos: { $nin: videoId },
+  });
+  console.log('filteredBookmarks', filteredBookmarks);
+};
 
 export const UserBookmarkModel = model<
   IUserBookmarkDocument,
