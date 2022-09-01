@@ -25,6 +25,7 @@ export const BlankBookmark = styled.div`
 
 export const BookmarkLabel = styled.label`
   display: flex;
+  justify-content: space-between;
   background: white;
   color: ${({ theme }) => theme.colors.primary.hex};
   align-items: center;
@@ -38,11 +39,17 @@ export const BookmarkLabel = styled.label`
   }
 `;
 
+export const BookamrkLabelDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 85%;
+`;
+
 export const BookmarkCheckbox = styled.input`
   appearance: none;
   width: 1.25rem;
   height: 1.25rem;
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};
 
   :checked {
@@ -52,7 +59,7 @@ export const BookmarkCheckbox = styled.input`
     background-repeat: no-repeat;
     background-color: ${({ theme }) => theme.colors.secondary.hex};
   }
-  
+
   :disabled {
     border: 1px solid grey;
     background-color: grey;
@@ -60,8 +67,42 @@ export const BookmarkCheckbox = styled.input`
 `;
 
 export const Title = styled.p`
+  width: 70%;
   font-size: 1.125rem;
+  margin-right: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
+
+export const BookmarkCount = styled.i`
+  width: 0.75rem;
+  height: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  margin-top: -1px;
+  margin-bottom: 1px;
+  border: 1px solid ${({ theme }) => theme.colors.primary.hex};
+  border-radius: 9999px;
+  background: ${({ theme }) => theme.colors.primary.hex};
+
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+
+  ${({ theme }) => css`
+    ${theme.media.tablet} {
+      width: 1.25rem;
+      height: 1.25rem;
+      padding: 0.625rem;
+      font-size: 1.25rem;
+    }
+  `}
+`;
+
 export const ConfirmButton = styled.button`
   width: 100%;
   padding: 1rem;

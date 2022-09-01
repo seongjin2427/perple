@@ -45,6 +45,7 @@ const YoutubeList = () => {
         {videos?.items.map((item) => (
           <Fragment key={item.etag}>
             <S.VideoWrapper onClick={(e) => openModal(e, item)}>
+                <VideoStatistics statistics={item?.statistics} />
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"
@@ -53,7 +54,6 @@ const YoutubeList = () => {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
-                <VideoStatistics statistics={item?.statistics} />
               </S.VideoThumbnailDiv>
               <S.VideoTextArea>
                 <S.VideoTitle>{item.snippet.localized.title}</S.VideoTitle>
