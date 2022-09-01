@@ -19,7 +19,7 @@ export const SearchInput = styled.input`
   height: 2.5rem;
   padding: 0 0.75rem;
 
-  border: 2px solid ${({ theme }) => theme.colors.secondary.hex};
+  border: 2px solid ${({ theme }) => theme.colors.primary.hex};
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.primary.hex};
 
@@ -31,15 +31,15 @@ export const SearchInput = styled.input`
 export const SearchButton = styled.button`
   width: 5rem;
   height: 2.75rem;
-  background: ${({ theme }) => theme.colors.secondary.hex};
+  background: ${({ theme }) => theme.colors.primary.hex};
   color: white;
   border: none;
   cursor: pointer;
 
   :hover {
-    background: ${({ theme }) => `rgba(${theme.colors.secondary.rgb}, 0.8)`};
+    background: ${({ theme }) => `rgba(${theme.colors.primary.rgb}, 0.8)`};
   }
   :active {
-    background: ${({ theme }) => theme.colors.secondary.hex};
+    background: ${({ theme }) => theme.colors.primary.hex};
   }
 `;

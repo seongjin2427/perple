@@ -39,21 +39,24 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
         {bookmarkList &&
           bookmarkList.length > 0 &&
           bookmarkList.map(({ bookmarkName, count, _id, videos }) => (
-            <S.BookmarkLabel key={_id} htmlFor={_id}>
-              <S.BookmarkCheckbox
-                id={_id}
-                name="bookmark"
-                type="checkbox"
-                onChange={() => actions.onChangeBookmarkCheck(_id)}
-                disabled={
-                  videos.findIndex((v) => v.videoId.videoId === item?.id) >= 0
-                }
-                checked={
-                  videos.findIndex((v) => v.videoId.videoId === item?.id) >=
-                    0 || undefined
-                }
-              />
-              <S.Title>{`${bookmarkName} (${count})`}</S.Title>
+            <S.BookmarkLabel key={_id} htmlFor={_id} title={bookmarkName}>
+              <S.BookamrkLabelDiv>
+                <S.BookmarkCheckbox
+                  id={_id}
+                  name="bookmark"
+                  type="checkbox"
+                  onChange={() => actions.onChangeBookmarkCheck(_id)}
+                  disabled={
+                    videos.findIndex((v) => v.videoId.videoId === item?.id) >= 0
+                  }
+                  checked={
+                    videos.findIndex((v) => v.videoId.videoId === item?.id) >=
+                      0 || undefined
+                  }
+                />
+                <S.Title>{`${bookmarkName}`}</S.Title>
+              </S.BookamrkLabelDiv>
+              <S.BookmarkCount>{count}</S.BookmarkCount>
             </S.BookmarkLabel>
           ))}
         {bookmarkList && bookmarkList.length === 0 && (
