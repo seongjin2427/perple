@@ -1,10 +1,13 @@
 import styled, { css } from 'styled-components';
-import { DROP_DOWN, DROP_UP } from 'styles/keyframe';
+import { DROP_DOWN, DROP_UP, LOAD_EFFECT } from 'styles/keyframe';
+
 
 export const Container = styled.div`
   width: 100%;
   max-width: 60rem;
   margin-bottom: 5rem;
+  animation: ${LOAD_EFFECT} 0.8s ease-in forwards;
+  
 `;
 
 export const BookmarkWrapper = styled.div``;
@@ -176,17 +179,11 @@ export const YoutubeCard = styled.div<ToggleType>`
   ${({ toggle }) =>
     toggle
       ? css`
-          animation: ${DROP_DOWN} 0.5s forwards ease-out;
+          animation: ${DROP_DOWN} 0.4s forwards ease-out;
         `
       : css`
-          animation: ${DROP_UP} 0.5s forwards ease-out;
+          animation: ${DROP_UP} 0.4s forwards ease-out;
         `}
-
-  ${({ theme }) => css`
-    ${theme.media.tablet} {
-      overflow-y: scroll;
-    }
-  `}
 `;
 
 export const VideoIframe = styled.iframe`
