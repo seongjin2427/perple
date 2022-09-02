@@ -17,6 +17,7 @@ interface IUser {
   };
 }
 export interface IUserDocument extends IUser, Document {
+  modifyUser(userInfo: ModifiedUserInfoType): void;
   createBookmark(title: string): IUserDocument;
   addBookmark(
     videoInfo: IVideoDocument,
@@ -143,6 +144,21 @@ userSchema.methods.removeYoutube = async function (
   const foundVideo = await Video.findById(videoId);
   const result = await UserBookmarkModel.findOne(foundVideo!._id);
   if (!result) await Video.findByIdAndRemove(videoId);
+};
+
+interface ModifiedUserInfoType {
+  nickname: string;
+  profileImage: string;
+}
+
+userSchema.methods.modifyUser = async function ({
+  nickname,
+  profileImage,
+}: ModifiedUserInfoType) {
+  this.profileImage = profileImage;
+  this.nickname = nickname;
+
+  await this.save();
 };
 
 const User = model<IUserDocument, IUserModel>('User', userSchema);

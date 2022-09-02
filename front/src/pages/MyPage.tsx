@@ -6,7 +6,7 @@ import MyPageLayout from 'layouts/MyPageLayout';
 const MyPage = () => {
   return (
     <MainLayout>
-      <MyPageLayout>ss</MyPageLayout>
+      <MyPageLayout />
     </MainLayout>
   );
 };

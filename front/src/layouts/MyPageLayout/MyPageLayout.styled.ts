@@ -89,7 +89,11 @@ export const SideNaviMenuUl = styled.ul`
   `}
 `;
 
-export const SideNaviMenuLi = styled.li`
+interface ActiveType {
+  active?: boolean;
+}
+
+export const SideNaviMenuLi = styled.li<ActiveType>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -109,6 +113,12 @@ export const SideNaviMenuLi = styled.li`
       font-size: 1.125rem;
     }
   `}
+
+  ${({ active }) =>
+    active &&
+    css`
+      font-weight: bold;
+    `}
 `;
 
 export const MainBox = styled.div`

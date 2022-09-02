@@ -1,12 +1,11 @@
-import React, { ReactNode } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+
 import * as S from './MyPageLayout.styled';
 
-interface MyPageLayoutProps {
-  children: ReactNode;
-}
+const MyPageLayout = () => {
+  const location = useLocation();
 
-const MyPageLayout = ({ children }: MyPageLayoutProps) => {
   return (
     <S.Container>
       <S.Wrapper>
@@ -15,8 +14,14 @@ const MyPageLayout = ({ children }: MyPageLayoutProps) => {
             <S.SideNaviTitle>마이페이지</S.SideNaviTitle>
             <S.SideNaviMenuDiv>
               <S.SideNaviMenuUl>
-                <S.SideNaviMenuLi>내 정보</S.SideNaviMenuLi>
-                <S.SideNaviMenuLi>
+                <S.SideNaviMenuLi
+                  active={location.pathname === '/my' ? true : false}
+                >
+                  내 정보
+                </S.SideNaviMenuLi>
+                <S.SideNaviMenuLi
+                  active={location.pathname === '/my/play' ? true : false}
+                >
                   <del>내 오픈 플레이</del>
                 </S.SideNaviMenuLi>
                 <S.SideNaviMenuLi>회원 탈퇴</S.SideNaviMenuLi>

@@ -59,6 +59,7 @@ export const ProfileImageDiv = styled.div`
 export const ProfileImage = styled.img`
   width: 100%;
   object-fit: contain;
+  cursor: pointer;
 `;
 
 export const ProfileInfoArea = styled.div`
@@ -126,6 +127,10 @@ export const ProfileInfoInput = styled.input`
 
   :focus {
     outline: none;
+  }
+
+  :disabled {
+    color: grey;
   }
 `;
 
