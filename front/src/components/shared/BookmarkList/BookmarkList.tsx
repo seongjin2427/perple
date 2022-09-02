@@ -154,7 +154,7 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkProps) => {
           <S.BookmarkIconDiv toggle={toggle}>
             <IconSet iconType="BallpenIcon" onClick={convertToModifyMode} />
             <IconSet iconType="BinIcon" onClick={removeBookmark} />
-            <S.BookmarkCount>{count}</S.BookmarkCount>
+            <S.BookmarkCount>{count > 99 ? '99+' : count}</S.BookmarkCount>
           </S.BookmarkIconDiv>
         </>
       )}
@@ -168,7 +168,7 @@ const BookmarkTitle = ({ bookmark, actions }: BookmarkProps) => {
           <S.BookmarkIconDiv toggle={toggle}>
             <IconSet iconType="CheckIcon" onClick={modifyBookmarkName} />
             <IconSet iconType="CrossIcon" onClick={cancelModifyMode} />
-            <S.BookmarkCount>{count}</S.BookmarkCount>
+            <S.BookmarkCount>{count > 99 ? '99+' : count}</S.BookmarkCount>
           </S.BookmarkIconDiv>
         </>
       )}

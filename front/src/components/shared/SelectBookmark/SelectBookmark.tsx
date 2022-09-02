@@ -56,7 +56,7 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
                 />
                 <S.Title>{`${bookmarkName}`}</S.Title>
               </S.BookamrkLabelDiv>
-              <S.BookmarkCount>{count}</S.BookmarkCount>
+              <S.BookmarkCount>{count > 99 ? '99+' : count}</S.BookmarkCount>
             </S.BookmarkLabel>
           ))}
         {bookmarkList && bookmarkList.length === 0 && (

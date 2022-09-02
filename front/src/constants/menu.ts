@@ -15,7 +15,7 @@ export const AUTH_HEADER_MENU = [
   {
     text: '마이페이지',
     name: 'myPage',
-    link: '/',
+    link: '/my',
   },
   {
     text: '북마크',
