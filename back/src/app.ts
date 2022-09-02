@@ -11,7 +11,7 @@ import Routes from './routes/index';
 
 const app: express.Application = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
 app.use(cookieParser());
 app.use(
   cors({
