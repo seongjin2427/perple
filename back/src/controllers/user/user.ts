@@ -19,3 +19,12 @@ export const modifyUser: RequestHandler = async (req, res, next) => {
 
   res.status(200).json({ message: '수정 완료!' });
 };
+
+export const withDrawUser: RequestHandler = async (req, res, next) => {
+  console.log('withDrawUser');
+  req.userInfo?.withDrawUser();
+
+  res.clearCookie('refreshToken');
+
+  res.status(200).json({ message: '탈퇴 완료' });
+};

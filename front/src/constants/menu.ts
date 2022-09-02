@@ -23,3 +23,14 @@ export const AUTH_HEADER_MENU = [
     link: '/bookmark',
   },
 ];
+
+export const MY_PAGE_MENU = [
+  {
+    text: '내 정보',
+    link: '/my',
+  },
+  {
+    text: '내 오픈 플레이',
+    link: '/my/play',
+  },
+];

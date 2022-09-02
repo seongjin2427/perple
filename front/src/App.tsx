@@ -9,6 +9,7 @@ import BookmarkPage from 'pages/BookmarkPage';
 import MyPage from 'pages/MyPage';
 import Page404 from 'pages/404';
 import MyProfile from 'components/MyProfile';
+import OpenPlayPage from 'pages/OpenPlayPage';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/search/:searchWord" element={<Main />} />
             <Route path="/my" element={<MyPage />}>
               <Route path="/my" element={<MyProfile />} />
+              <Route path="/my/play" element={<OpenPlayPage />} />
             </Route>
             <Route path="/error" element={<Page404 />} />
             <Route path="*" element={<Navigate to="/" />} />

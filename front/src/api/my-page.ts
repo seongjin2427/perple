@@ -25,3 +25,10 @@ export const modifyUser = async (userInfo: GetUserDataType) => {
     console.log(e);
   }
 };
+
+export const withDrawUser = async () => {
+  try {
+    const { data } = await instance.post('/user/withdraw');
+    console.log(data);
+  } catch (e) {}
+};

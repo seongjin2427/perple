@@ -105,7 +105,11 @@ const ProfileImageArea = () => {
       <S.ProfileImageDiv>
         {profileImage && (
           <S.ProfileImage
-            title="이미지를 클릭하여 프로필 사진을 변경해보세요!"
+            title={
+              modifyMode
+                ? '이미지를 클릭하여 프로필 사진을 변경해보세요!'
+                : '프로필 이미지'
+            }
             src={profileImage}
             onClick={onClickInputImage}
           />
