@@ -116,7 +116,6 @@ export const getYoutubeVideos = async ({
         prevPageToken: data.prevPageToken,
       };
     }
-    console.log(data);
     const youtubeData = {
       data,
       pageInfo,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { DefaultTheme, StyledComponent } from 'styled-components';
 
-import useMenu from 'hooks/useMenu';
+import useAuth from 'hooks/useAuth';
 import useModal from 'hooks/useModal';
 import LoginComponent from 'components/LoginComponent';
 
@@ -20,7 +20,7 @@ const LoginMenu = ({
   menus,
   element: Component,
 }: LoginMenuMenuProps) => {
-  const [{ login, logout }] = useMenu();
+  const [{ login, logout }] = useAuth();
   const [, actions, Modal] = useModal({ title: '로그인' });
 
   const doFunction = () => {

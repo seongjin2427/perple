@@ -45,7 +45,6 @@ const YoutubeList = () => {
         {videos?.items.map((item) => (
           <Fragment key={item.etag}>
             <S.VideoWrapper onClick={(e) => openModal(e, item)}>
-                <VideoStatistics statistics={item?.statistics} />
               <S.VideoThumbnailDiv>
                 <S.VideoIframe
                   title="영상"
@@ -61,6 +60,7 @@ const YoutubeList = () => {
                   {item.snippet.channelTitle}
                 </S.VideoChannelTitle>
               </S.VideoTextArea>
+              <VideoStatistics statistics={item?.statistics} />
             </S.VideoWrapper>
           </Fragment>
         ))}

@@ -23,12 +23,12 @@ export const VideoWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0.25rem;
-  /* padding: 1.75rem; */
   border: 1px solid ${({ theme }) => theme.colors.primary.hex};
   border-radius: 1.5rem;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   color: ${({ theme }) => theme.colors.primary.hex};
   overflow: hidden;
+  cursor: pointer;
 
   :hover {
     transform: translate(-2.5px, -2.5px);

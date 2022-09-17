@@ -10,7 +10,6 @@ export interface GetUserDataType {
 export const getUser = async () => {
   try {
     const { data } = await instance.get<GetUserDataType>('/user');
-    console.log(data);
     return data;
   } catch (e) {
     console.log(e);
@@ -20,7 +19,6 @@ export const getUser = async () => {
 export const modifyUser = async (userInfo: GetUserDataType) => {
   try {
     const { data } = await instance.put('/user', { userInfo });
-    console.log(data);
   } catch (e) {
     console.log(e);
   }
@@ -29,6 +27,7 @@ export const modifyUser = async (userInfo: GetUserDataType) => {
 export const withDrawUser = async () => {
   try {
     const { data } = await instance.post('/user/withdraw');
-    console.log(data);
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
 };

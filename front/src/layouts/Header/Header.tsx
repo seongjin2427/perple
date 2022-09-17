@@ -10,50 +10,23 @@ import LoginComponent from 'components/LoginComponent';
 import Menu from 'components/shared/Menu';
 import LoginMenu from 'components/shared/LoginMenu';
 
-import instance from 'api/instance';
 import useSecondModal from 'hooks/useModal';
-import {
-  toggleSideMenu,
-  userInfoSet,
-  userLogin,
-  userLogout,
-} from 'store/globalSlice';
+import { toggleSideMenu } from 'store/globalSlice';
 import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
 import * as S from './Header.styled';
+import useAuth from 'hooks/useAuth';
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [{ login }] = useAuth();
   const { isLogin: isAuth, sideMenu } = useSelector(
     ({ global }: RootState) => global,
   );
 
-  const loginFunction = useCallback(async () => {
-    if (!isAuth) {
-      try {
-        const { data } = await instance.post(
-          'http://localhost:8080/auth/token',
-        );
-
-        const accessToken = localStorage.getItem('Authorization');
-        if (data.accessToken && accessToken) {
-          localStorage.setItem('Authorization', data.accessToken);
-          dispatch(userInfoSet(data.userInfo));
-          dispatch(userLogin());
-        } else {
-          dispatch(userLogout());
-          loginFunction();
-        }
-      } catch (e) {
-        console.log(e);
-        dispatch(userLogout());
-      }
-    }
-  }, [dispatch, isAuth]);
-
   useEffect(() => {
-    loginFunction();
-  }, [loginFunction]);
+    login();
+  }, [login]);
 
   const [, , Modal] = useSecondModal({
     title: '로그인',
