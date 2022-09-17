@@ -1,8 +1,8 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toggleSideMenu } from 'store/globalSlice';
 import { DefaultTheme, StyledComponent } from 'styled-components';
-
-import useModal from 'hooks/useModal';
 
 interface MenuProps {
   isAuth?: boolean;
@@ -15,12 +15,12 @@ interface MenuProps {
 }
 
 const Menu = ({ isAuth, menus, element: Component }: MenuProps) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [, { open }] = useModal();
 
   const doFunction = (link: string) => {
-    if (!isAuth) open();
-    else navigate(link);
+    navigate(link, { replace: true });
+    dispatch(toggleSideMenu(false));
   };
 
   return (

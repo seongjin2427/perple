@@ -15,6 +15,7 @@ export const Container = styled.div<ActiveType>`
   position: fixed;
   right: 0;
   opacity: 0;
+  z-index: 1000;
 
   transition: transform 0.2s ease-in-out, opacity 0.2s;
   transform: translateX(100%);

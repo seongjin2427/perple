@@ -8,9 +8,9 @@ export const Container = styled.div`
   justify-content: space-between;
   position: fixed;
   background: red;
-  z-index: 5000;
   background: white;
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary.hex};
+  z-index: ${({ theme }) => theme.zIndex.header};
 `;
 
 export const LogoDiv = styled.div`
@@ -18,6 +18,7 @@ export const LogoDiv = styled.div`
   background: url(${require('../../assets/only_logo.png')}) center center
     no-repeat;
   background-size: contain;
+  cursor: pointer;
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
@@ -30,56 +31,26 @@ export const LogoDiv = styled.div`
 `;
 
 export const SearchDiv = styled.div`
-  flex: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-
-  ${({ theme }) => css`
-    ${theme.media.desktop} {
-      justify-content: flex-end;
-      flex: 5;
-    }
-  `}
+  width: 50%;
 `;
 
-export const SearchInput = styled.input`
-  width: 70%;
-  height: 2.5rem;
-  font-size: 1rem;
-  padding: 0 0.75rem;
-  color: ${({ theme }) => theme.colors.primary.hex};
-  border: 2px solid ${({ theme }) => theme.colors.secondary.hex};
-  :focus {
-    outline: 1px solid ${({ theme }) => theme.colors.primary.hex};
-  }
-`;
+interface HeaderMenuDivType {
+  isAuth: boolean;
+}
 
-export const SearchButton = styled.button`
-  width: 3rem;
-  height: 2.75rem;
-  background: ${({ theme }) => theme.colors.secondary.hex};
-  color: white;
-  border: none;
-  cursor: pointer;
-
-  :hover {
-    background: ${({ theme }) => `rgba(${theme.colors.secondary.rgb}, 0.8)`};
-  }
-  :active {
-    background: ${({ theme }) => theme.colors.secondary.hex};
-  }
-`;
-
-export const HeaderMenuDiv = styled.div`
+export const HeaderMenuDiv = styled.div<HeaderMenuDivType>`
   display: none;
-  flex: 3;
+  width: 25rem;
+
+  ${({ isAuth }) =>
+    !isAuth &&
+    css`
+      width: 10rem;
+    `}
 
   ${({ theme }) => css`
     ${theme.media.tablet} {
       display: flex;
-      align-items: center;
       justify-content: center;
     }
   `}
@@ -87,12 +58,14 @@ export const HeaderMenuDiv = styled.div`
 
 export const HeaderMenuUl = styled.ul`
   display: flex;
+  align-items: center;
 `;
 
 export const HeaderMenuLi = styled.li`
   color: ${({ theme }) => theme.colors.primary.hex};
-  margin: 0 1vw;
+  margin: 0 1rem;
   cursor: pointer;
+
   :hover {
     font-weight: bold;
   }

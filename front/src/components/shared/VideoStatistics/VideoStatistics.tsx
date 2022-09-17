@@ -13,12 +13,16 @@ const VideoStatisticsBox = ({
   statisticsString,
 }: VideoStatisticsBoxProps) => {
   return (
-    <S.VideoStatisticsParagraphBox>
-      <S.VideoStatisticsParagraph>{minTitle}</S.VideoStatisticsParagraph>
-      <S.VideoStatisticsParagraph>
-        {abbreviateNumber(statisticsString)}
-      </S.VideoStatisticsParagraph>
-    </S.VideoStatisticsParagraphBox>
+    <>
+      {statisticsString && (
+        <S.VideoStatisticsParagraphBox>
+          <S.VideoStatisticsParagraph>{minTitle}</S.VideoStatisticsParagraph>
+          <S.VideoStatisticsParagraph>
+            {abbreviateNumber(statisticsString)}
+          </S.VideoStatisticsParagraph>
+        </S.VideoStatisticsParagraphBox>
+      )}
+    </>
   );
 };
 

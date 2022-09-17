@@ -1,3 +1,4 @@
+import { DefaultYoutubeType } from 'api/youtube';
 import React from 'react';
 
 import * as S from './Pagination.styled';
@@ -5,10 +6,7 @@ import * as S from './Pagination.styled';
 interface PaginationProps {
   prevPageToken?: string;
   nextPageToken?: string;
-  pageInfo?: {
-    resultsPerPage: number;
-    totalResults: number;
-  };
+  pageInfo?: DefaultYoutubeType;
   getVideos: (token?: string) => void;
 }
 

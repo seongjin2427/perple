@@ -1,25 +1,36 @@
-export const UNAUTH_HEADER_MENU = [
+export const LOGIN_MENU = [
   {
     text: '로그인',
     name: 'login',
-    link: '/',
+    show: false,
+  },
+  {
+    text: '로그아웃',
+    name: 'logout',
+    show: true,
   },
 ];
 
 export const AUTH_HEADER_MENU = [
   {
-    text: '로그아웃',
-    name: 'logout',
-    link: '/',
-  },
-  {
     text: '마이페이지',
     name: 'myPage',
-    link: '/',
+    link: '/my',
   },
   {
-    text: '공유하기',
-    name: 'share',
-    link: '/',
+    text: '북마크',
+    name: 'bookmark',
+    link: '/bookmark',
+  },
+];
+
+export const MY_PAGE_MENU = [
+  {
+    text: '내 정보',
+    link: '/my',
+  },
+  {
+    text: '내 오픈 플레이',
+    link: '/my/play',
   },
 ];

@@ -1,11 +1,35 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_YOUTUBE_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 
-instance.interceptors.request.use((config) => {});
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('Authorization');
+    if (config.headers) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+      config.withCredentials = true;
+    }
+    return config;
+  },
+  (err) => {
+    console.log(err);
+    return Promise.reject(err);
+  },
+);
 
-instance.interceptors.response.use((config) => {});
+instance.interceptors.response.use(async (config) => {
+  if (config.data['accessToken']) {
+    localStorage.setItem('Authorization', config.data['accessToken']);
+  }
 
-export default axios;
+  if (config.data.errorMessage === 'login needed') {
+    alert('토큰이 만료되었습니다.\n로그인이 필요합니다');
+    window.location.reload();
+  }
+
+  return config;
+});
+
+export default instance;
