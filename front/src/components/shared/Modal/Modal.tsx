@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import { HTMLAttributes, MouseEvent, ReactNode, useEffect } from 'react';
 import reactDom from 'react-dom';
 
 import { ReturnComponentType, ModalActionsType } from 'hooks/useModal';
+=======
+import React from 'react';
+
+import useModal from 'hooks/useModal';
+>>>>>>> main
 import * as S from './Modal.styled';
 
 interface ModalProps {
