@@ -1,4 +1,5 @@
 import { DefaultYoutubeType } from 'api/youtube';
+import IconSet from 'components/shared/IconSet';
 import React from 'react';
 
 import * as S from './Pagination.styled';
@@ -20,12 +21,12 @@ const Pagination = ({
     <S.Container>
       {prevPageToken && (
         <S.PrevNextButton onClick={() => getVideos(prevPageToken)}>
-          ←
+          <IconSet iconType="ChevronLeftIcon" />
         </S.PrevNextButton>
       )}
       {nextPageToken && (
         <S.PrevNextButton onClick={() => getVideos(nextPageToken)}>
-          →
+          <IconSet iconType="ChevronRightIcon" />
         </S.PrevNextButton>
       )}
     </S.Container>
