@@ -18,7 +18,7 @@ Perple은 **'Personal Player'의 줄임말**입니다.
 
 ### Back-end
 
-<img alt="Nodejs" src="https://img.shields.io/badge/-Nodejs-339933?style=flat-square&logo=Node.js&logoColor=white" /> <img alt="Express" src="https://img.shields.io/badge/-Express-yellow?style=flat-square&logo=express&logoColor=white" /> <img alt="MongoDB" src="https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white" />
+<img alt="Nodejs" src="https://img.shields.io/badge/-Nodejs-339933?style=flat-square&logo=Node.js&logoColor=white" /> <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" /> <img alt="Express" src="https://img.shields.io/badge/-Express-yellow?style=flat-square&logo=express&logoColor=white" /> <img alt="MongoDB" src="https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white" />
 
 <br />
 
