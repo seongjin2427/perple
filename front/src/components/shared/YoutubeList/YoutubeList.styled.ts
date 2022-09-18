@@ -6,7 +6,7 @@ export const Container = styled.div`
 
 export const Title = styled.h1`
   color: ${({ theme }) => theme.colors.primary.hex};
-  margin: 1.5rem 1rem 1.75rem 1rem;
+  margin: 1.5rem 1rem 1.75rem 5%;
   font-size: 2rem;
   font-weight: bold;
 `;
