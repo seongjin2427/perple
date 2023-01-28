@@ -28,13 +28,28 @@ Perple은 **'Personal Player'의 줄임말**입니다.
 // 프로젝트 복제
 git clone https://github.com/seongjin2427/perple.git
 
-// 서버 실행
+// perple 프로젝트 폴더로 이동
+cd perple
+
+// 서버 폴더로 이동
 cd back
-npm run dev
+
+// 패키지 설치
+yarn
+
+// 서버 실행
+yarn dev
+
+---
 
 // 웹서버 실행, 새 터미널을 연 뒤
 cd front
-npm start
+
+// 패키지 설치 
+yarn
+
+// 리액트 웹서버 실행
+yarn start
 ```
 
 ## 서론
