@@ -22,6 +22,21 @@ Perple은 **'Personal Player'의 줄임말**입니다.
 
 <br />
 
+## 실행방법
+
+```
+// 프로젝트 복제
+git clone https://github.com/seongjin2427/perple.git
+
+// 서버 실행
+cd back
+npm run dev
+
+// 웹서버 실행, 새 터미널을 연 뒤
+cd front
+npm start
+```
+
 ## 서론
 
 - 유튜브에서는 저장하고픈 영상을 별도로 보관할 수는 있지만 하나의 폴더에만 보관이 가능합니다
