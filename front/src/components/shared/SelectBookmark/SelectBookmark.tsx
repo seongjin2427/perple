@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import useBookmark from 'hooks/useBookmark';
-import * as S from './SelectBookmark.styled';
-import { YoutubeVideosItemType } from 'api/youtube';
-import CreateFolder from 'components/shared/CreateFolder';
+import useBookmark from "hooks/useBookmark";
+import * as S from "./SelectBookmark.styled";
+import { YoutubeVideosItemType } from "api/youtube";
+import CreateFolder from "components/shared/CreateFolder";
 
 interface SelectBookmarkProps {
   item: YoutubeVideosItemType | undefined;
@@ -38,27 +38,27 @@ const SelectBookmark = ({ item, close }: SelectBookmarkProps) => {
       <S.BookmarkWrapper>
         {bookmarkList &&
           bookmarkList.length > 0 &&
-          bookmarkList.map(({ bookmarkName, count, _id, videos }) => (
-            <S.BookmarkLabel key={_id} htmlFor={_id} title={bookmarkName}>
-              <S.BookamrkLabelDiv>
-                <S.BookmarkCheckbox
-                  id={_id}
-                  name="bookmark"
-                  type="checkbox"
-                  onChange={() => actions.onChangeBookmarkCheck(_id)}
-                  disabled={
-                    videos.findIndex((v) => v.videoId.videoId === item?.id) >= 0
-                  }
-                  checked={
-                    videos.findIndex((v) => v.videoId.videoId === item?.id) >=
-                      0 || undefined
-                  }
-                />
-                <S.Title>{`${bookmarkName}`}</S.Title>
-              </S.BookamrkLabelDiv>
-              <S.BookmarkCount>{count > 99 ? '99+' : count}</S.BookmarkCount>
-            </S.BookmarkLabel>
-          ))}
+          bookmarkList.map(({ bookmarkName, count, _id, videos }) => {
+            const isExist =
+              videos.findIndex((v) => v.videoId.videoId === item?.id) >= 0;
+
+            return (
+              <S.BookmarkLabel key={_id} htmlFor={_id} title={bookmarkName}>
+                <S.BookamrkLabelDiv>
+                  <S.BookmarkCheckbox
+                    id={_id}
+                    name="bookmark"
+                    type="checkbox"
+                    onChange={() => actions.onChangeBookmarkCheck(_id)}
+                    disabled={isExist}
+                    checked={isExist || undefined}
+                  />
+                  <S.Title>{`${bookmarkName}`}</S.Title>
+                </S.BookamrkLabelDiv>
+                <S.BookmarkCount>{count > 99 ? "99+" : count}</S.BookmarkCount>
+              </S.BookmarkLabel>
+            );
+          })}
         {bookmarkList && bookmarkList.length === 0 && (
           <S.BlankBookmark>북마크가 없어요!</S.BlankBookmark>
         )}
