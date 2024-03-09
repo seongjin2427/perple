@@ -103,7 +103,7 @@ export const SideNaviMenuLi = styled.li<ActiveType>`
   color: ${({ theme }) => theme.colors.primary.hex};
   font-size: 0.75rem;
 
-  :hover {
+  &:hover {
     font-weight: bold;
   }
 

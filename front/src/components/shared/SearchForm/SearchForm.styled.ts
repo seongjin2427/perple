@@ -23,7 +23,7 @@ export const SearchInput = styled.input`
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.primary.hex};
 
-  :focus {
+  &:focus {
     outline: 1px solid ${({ theme }) => theme.colors.primary.hex};
   }
 `;
@@ -36,10 +36,10 @@ export const SearchButton = styled.button`
   border: none;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background: ${({ theme }) => `rgba(${theme.colors.primary.rgb}, 0.8)`};
   }
-  :active {
+  &:active {
     background: ${({ theme }) => theme.colors.primary.hex};
   }
 `;

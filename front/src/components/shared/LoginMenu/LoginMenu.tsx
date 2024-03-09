@@ -1,9 +1,8 @@
-import React from 'react';
-import { DefaultTheme, StyledComponent } from 'styled-components';
+import { IStyledComponent } from "styled-components";
 
-import useMenu from 'hooks/useMenu';
-import useModal from 'hooks/useModal';
-import LoginComponent from 'components/LoginComponent';
+import useMenu from "hooks/useMenu";
+import useModal from "hooks/useModal";
+import LoginComponent from "components/LoginComponent";
 
 interface LoginMenuMenuProps {
   isAuth?: boolean;
@@ -12,7 +11,7 @@ interface LoginMenuMenuProps {
     name: string;
     show: boolean;
   }[];
-  element: StyledComponent<'li', DefaultTheme, {}, never>;
+  element: IStyledComponent<any, any>;
 }
 
 const LoginMenu = ({
@@ -21,7 +20,7 @@ const LoginMenu = ({
   element: Component,
 }: LoginMenuMenuProps) => {
   const [{ login, logout }] = useMenu();
-  const [, actions, Modal] = useModal({ title: '로그인' });
+  const [, actions, Modal] = useModal({ title: "로그인" });
 
   const doFunction = () => {
     if (isAuth) logout();
@@ -42,7 +41,7 @@ const LoginMenu = ({
             <Component key={name} onClick={() => doFunction()}>
               {text}
             </Component>
-          ),
+          )
       )}
     </>
   );

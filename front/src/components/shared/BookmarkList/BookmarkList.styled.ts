@@ -43,7 +43,7 @@ export const BookmarkTitleDiv = styled.div<ToggleType>`
   padding: 0 1rem 0 0.75rem;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     font-weight: bold;
   }
 
@@ -91,7 +91,7 @@ export const BookmarkTitleInput = styled.input`
   border: none;
   color: ${({ theme }) => theme.colors.primary.hex};
   font-size: 1rem;
-  :focus {
+  &:focus {
     outline: none;
   }
   ${({ theme }) => css`
@@ -116,7 +116,7 @@ export const BookmarkIconDiv = styled.div<ToggleType>`
     margin-right: 0.375rem;
     fill: rgba(${({ theme }) => theme.colors.primary.rgb}, 1);
 
-    :hover {
+    &:hover {
       background: ${({ theme }) => theme.colors.primary.hex};
       fill: white;
     }
@@ -204,7 +204,7 @@ export const YoutubeContent = styled.div`
   position: relative;
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary.hex};
 
-  :last-child {
+  &:last-child {
     border-bottom: none;
   }
 

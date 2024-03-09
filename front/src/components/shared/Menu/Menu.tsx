@@ -1,8 +1,7 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { toggleSideMenu } from 'store/globalSlice';
-import { DefaultTheme, StyledComponent } from 'styled-components';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toggleSideMenu } from "store/globalSlice";
+import { IStyledComponent } from "styled-components";
 
 interface MenuProps {
   isAuth?: boolean;
@@ -11,7 +10,7 @@ interface MenuProps {
     name: string;
     link: string;
   }[];
-  element: StyledComponent<'li', DefaultTheme, {}, never>;
+  element: IStyledComponent<any, any>;
 }
 
 const Menu = ({ isAuth, menus, element: Component }: MenuProps) => {

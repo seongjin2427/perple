@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model, ObjectId } from 'mongoose';
+import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
 
 interface IVideo {
   title: string;
@@ -10,7 +10,9 @@ interface IVideo {
 
 export interface IVideoDocument extends IVideo, Document {}
 
-interface IVideoModel extends Model<IVideoDocument> {}
+interface IVideoModel extends Model<IVideoDocument> {
+  findByIdAndRemove: (videoId: Schema.Types.ObjectId | string) => IVideo;
+}
 
 const videoSchema = new Schema(
   {
@@ -39,10 +41,10 @@ const videoSchema = new Schema(
       createdAt: true,
       updatedAt: true,
     },
-  },
+  }
 );
 
 export default mongoose.model<IVideoDocument, IVideoModel>(
-  'Video',
-  videoSchema,
+  "Video",
+  videoSchema
 );

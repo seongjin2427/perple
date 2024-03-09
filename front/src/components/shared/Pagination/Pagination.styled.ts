@@ -9,7 +9,7 @@ export const Container = styled.div`
 export const PrevNextButton = styled.div`
   width: 5rem;
   margin: 0 3rem;
-  :hover {
+  &:hover {
     cursor: pointer;
   }
   svg {

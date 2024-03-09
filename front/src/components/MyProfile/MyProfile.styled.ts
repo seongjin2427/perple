@@ -125,11 +125,11 @@ export const ProfileInfoInput = styled.input`
   color: ${({ theme }) => theme.colors.primary.hex};
   font-size: 1rem;
 
-  :focus {
+  &:focus {
     outline: none;
   }
 
-  :disabled {
+  &:disabled {
     color: grey;
   }
 `;

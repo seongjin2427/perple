@@ -66,7 +66,7 @@ export const HeaderMenuLi = styled.li`
   margin: 0 1rem;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     font-weight: bold;
   }
 `;

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
@@ -30,7 +30,7 @@ export const VideoWrapper = styled.div`
   color: ${({ theme }) => theme.colors.primary.hex};
   overflow: hidden;
 
-  :hover {
+  &&:hover {
     transform: translate(-2.5px, -2.5px);
     box-shadow: 2.5px 2.5px 5px ${({ theme }) => theme.colors.primary.hex};
   }

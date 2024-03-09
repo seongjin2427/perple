@@ -1,11 +1,11 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
-import Menu from 'components/shared/Menu';
-import { RootState } from 'store/store';
-import { LOGIN_MENU, AUTH_HEADER_MENU } from 'constants/menu';
-import * as S from './SideMenu.styled';
-import LoginMenu from 'components/shared/LoginMenu';
+import Menu from "components/shared/Menu";
+import { RootState } from "store/store";
+import { LOGIN_MENU, AUTH_HEADER_MENU } from "constants/menu";
+import * as S from "./SideMenu.styled";
+import LoginMenu from "components/shared/LoginMenu";
 
 interface SideMenuProps {
   active: boolean;
@@ -13,7 +13,7 @@ interface SideMenuProps {
 
 const SideMenu = ({ active }: SideMenuProps) => {
   const { isLogin: isAuth, userInfo } = useSelector(
-    ({ global }: RootState) => global,
+    ({ global }: RootState) => global
   );
 
   return (

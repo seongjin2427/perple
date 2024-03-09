@@ -17,7 +17,7 @@ export const CreateBookmarkDiv = styled.div<ModifyModeType>`
   ${({ modifyMode }) =>
     !modifyMode &&
     css`
-      :hover {
+      &:hover {
         background: rgb(${({ theme }) => theme.colors.thirdary.rgb}, 0.8);
       }
     `}
@@ -37,10 +37,10 @@ export const CreateBookmarkInput = styled.input`
   border: 0;
   font-size: 1rem;
 
-  ::placeholder {
+  &::placeholder {
     color: ${({ theme }) => `rgba(${theme.colors.primary.rgb}, 0.4)`};
   }
-  :focus {
+  &:focus {
     outline: none;
   }
 
@@ -59,7 +59,7 @@ export const CreatBookmarkButton = styled.button`
   border: none;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background: ${({ theme }) => theme.colors.primary.hex};
     color: white;
     border-radius: 0.25rem;

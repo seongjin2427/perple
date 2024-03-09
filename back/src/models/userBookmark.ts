@@ -1,4 +1,4 @@
-import { Schema, Document, Model, ObjectId, model } from 'mongoose';
+import { Schema, Document, Model, ObjectId, model } from "mongoose";
 
 export interface IUserBookmark {
   userId: ObjectId;
@@ -11,7 +11,9 @@ export interface IUserBookmark {
 
 export interface IUserBookmarkDocument extends IUserBookmark, Document {}
 
-interface IUserBookmarkModel extends Model<IUserBookmarkDocument> {}
+interface IUserBookmarkModel extends Model<IUserBookmarkDocument> {
+  findByIdAndRemove: (bookmarkId: string | Schema.Types.ObjectId) => IUserBookmark;
+}
 
 const userBookmarkSchema: Schema<
   IUserBookmarkDocument,
@@ -20,7 +22,7 @@ const userBookmarkSchema: Schema<
 > = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
   },
   bookmarkName: {
     type: String,
@@ -31,7 +33,7 @@ const userBookmarkSchema: Schema<
     {
       videoId: {
         type: Schema.Types.ObjectId,
-        ref: 'Video',
+        ref: "Video",
       },
     },
   ],
@@ -40,4 +42,4 @@ const userBookmarkSchema: Schema<
 export const UserBookmarkModel = model<
   IUserBookmarkDocument,
   IUserBookmarkModel
->('UserBookmark', userBookmarkSchema);
+>("UserBookmark", userBookmarkSchema);
