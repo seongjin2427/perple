@@ -61,20 +61,6 @@ export const getToken = async (
 };
 
 const GOOGLE_AUTH_TOKEN_URL = "https://oauth2.googleapis.com/token";
-const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-
-export const getGoogleCode = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  console.log("getGoogleToken");
-  const GOOGLE_AUTH_REDIRECT_URL = `${process.env.SERVER_BASE_URL}/auth/google/callback`;
-
-  return res.redirect(
-    `${GOOGLE_AUTH_URL}?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_AUTH_REDIRECT_URL}&response_type=code&include_granted_scopes=true&scope=https://www.googleapis.com/auth/userinfo.profile`
-  );
-};
 
 export const getGoogleToken = async (
   req: Request,

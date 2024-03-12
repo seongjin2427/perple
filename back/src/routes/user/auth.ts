@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  getGoogleCode,
+  // getGoogleCode,
   getGoogleToken,
   getToken,
   userLogout,
@@ -15,7 +15,7 @@ router.post('/logout', userLogout);
 router.post('/token', getToken);
 
 // 구글 로그인해서 코드 받기
-router.get('/google', getGoogleCode);
+// router.get('/google', getGoogleCode);
 
 // 구글 Access Token 받기
 router.get('/google/callback', getGoogleToken);

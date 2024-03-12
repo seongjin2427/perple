@@ -32,17 +32,15 @@ const Header = () => {
     if (!isAuth) {
       try {
         const { data } = await instance.post("/auth/token");
-        console.log(data);
 
-        const accessToken = localStorage.getItem("Authorization");
-        if (data.accessToken && accessToken) {
+        if (data.accessToken) {
           localStorage.setItem("Authorization", data.accessToken);
           dispatch(userInfoSet(data.userInfo));
           dispatch(userLogin());
         } else {
           dispatch(userLogout());
           loginFunction();
-        } 
+        }
       } catch (e) {
         console.log(e);
         dispatch(userLogout());
