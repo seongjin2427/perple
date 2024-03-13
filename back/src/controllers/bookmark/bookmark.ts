@@ -1,10 +1,10 @@
-import { RequestHandler } from 'express';
+import { RequestHandler } from "express";
 
-import Video from '@/src/models/video';
-import { UserBookmarkModel } from '@/src/models/userBookmark';
+import Video from "@/src/models/video";
+import { UserBookmarkModel } from "@/src/models/userBookmark";
 
 export const createBookmark: RequestHandler = async (req, res, next) => {
-  console.log('createBookmark');
+  console.log("createBookmark");
   const bookmarkTitle = req.body.bookmarkTitle;
 
   const user = await req.userInfo?.createBookmark(bookmarkTitle);
@@ -13,36 +13,39 @@ export const createBookmark: RequestHandler = async (req, res, next) => {
 };
 
 export const getAllBookmark: RequestHandler = async (req, res, next) => {
-  console.log('getAllBookmark');
+  console.log("getAllBookmark");
   const deepPopulate = req.query.deep;
   let user;
-  if (deepPopulate === 'true') {
+  if (deepPopulate === "true") {
     user = await req.userInfo?.populate({
-      path: 'bookmarks.bookmark',
+      path: "bookmarks.bookmark",
       populate: {
-        path: 'videos.videoId',
+        path: "videos.videoId",
         model: Video,
       },
     });
   } else {
     user = await req.userInfo?.populate({
-      path: 'bookmarks.bookmark',
+      path: "bookmarks.bookmark",
       populate: {
-        path: 'videos.videoId',
+        path: "videos.videoId",
         model: Video,
-        select: 'videoId',
+        select: "videoId",
       },
     });
   }
+
+  console.log(user?.bookmarks.bookmark[0].videos);
+
   res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
 
 export const addBookmark: RequestHandler = async (req, res, next) => {
-  console.log('addBookmark');
+  console.log("addBookmark");
 
   const selectBookmarkId = req.body.selectBookmarkId;
   if (!selectBookmarkId.length) {
-    return res.status(400).json({ message: '북마크를 선택하세요!' });
+    return res.status(400).json({ message: "북마크를 선택하세요!" });
   }
 
   const videoId = req.body.bookmarkInfo.videoId;
@@ -68,20 +71,20 @@ export const addBookmark: RequestHandler = async (req, res, next) => {
     await video.save();
     await req.userInfo?.addBookmark(video, selectBookmarkId);
   }
-  return res.status(200).json({ message: '성공!' });
+  return res.status(200).json({ message: "성공!" });
 };
 
 export const removeBookmark: RequestHandler = async (req, res, next) => {
-  console.log('removeBookmark');
+  console.log("removeBookmark");
 
   const id = req.params.bookmarkId;
   await req.userInfo?.removeBookmark(id);
 
-  res.status(200).json({ message: '삭제 완료!' });
+  res.status(200).json({ message: "삭제 완료!" });
 };
 
 export const modifyTitleName: RequestHandler = async (req, res, next) => {
-  console.log('modifyTitleName');
+  console.log("modifyTitleName");
   const { id, title } = req.body;
   const result = await UserBookmarkModel.findByIdAndUpdate(id, {
     $set: {
@@ -89,16 +92,16 @@ export const modifyTitleName: RequestHandler = async (req, res, next) => {
     },
   });
   console.log(result);
-  res.status(200).json({ message: '업데이트 완료!' });
+  res.status(200).json({ message: "업데이트 완료!" });
 };
 
 export const removeYoutube: RequestHandler = async (req, res, next) => {
-  console.log('removeYoutube');
+  console.log("removeYoutube");
 
   const bookmarkId = req.params.bookmarkId;
   const videoId = req.params.videoId;
 
   await req.userInfo?.removeYoutube(bookmarkId, videoId);
 
-  res.status(200).json({ message: '삭제 완료!' });
+  res.status(200).json({ message: "삭제 완료!" });
 };

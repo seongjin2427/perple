@@ -110,7 +110,7 @@ userSchema.methods.removeBookmark = async function (bookmarkId: string) {
   console.log("methods.removeBookmark");
 
   // 북마크 도큐먼트 삭제
-  const foundBookmark = await UserBookmarkModel.findByIdAndRemove(bookmarkId);
+  const foundBookmark = await UserBookmarkModel.findByIdAndDelete(bookmarkId);
 
   // 전체 북마크 내 유튜브가 여기만 있다면 유튜브 삭제
   foundBookmark?.videos.forEach(async ({ videoId }) => {
@@ -121,7 +121,7 @@ userSchema.methods.removeBookmark = async function (bookmarkId: string) {
         },
       },
     }).exec();
-    if (result.length <= 0) await Video.findByIdAndRemove(videoId);
+    if (result.length <= 0) await Video.findByIdAndDelete(videoId);
   });
 
   // 유저 북마크 삭제
@@ -157,7 +157,7 @@ userSchema.methods.removeYoutube = async function (
       },
     },
   }).exec();
-  if (result.length <= 0) await Video.findByIdAndRemove(videoId);
+  if (result.length <= 0) await Video.findByIdAndDelete(videoId);
 };
 
 interface ModifiedUserInfoType {
@@ -181,7 +181,7 @@ userSchema.methods.withDrawUser = async function () {
   const bookmarks = this.bookmarks.bookmark;
 
   bookmarks.forEach(async (bm: ObjectId) => {
-    const bookmark = await UserBookmarkModel.findByIdAndRemove(bm);
+    const bookmark = await UserBookmarkModel.findByIdAndDelete(bm);
 
     await bookmark!.videos.forEach(async ({ videoId }) => {
       const result = await UserBookmarkModel.find({
@@ -191,7 +191,7 @@ userSchema.methods.withDrawUser = async function () {
           },
         },
       }).exec();
-      if (result.length <= 0) await Video.findByIdAndRemove(videoId);
+      if (result.length <= 0) await Video.findByIdAndDelete(videoId);
     });
   });
 

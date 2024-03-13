@@ -68,7 +68,7 @@ const useBookmark = (
     },
     onClickCreateBookmark: async function (bookmarkTitle: string) {
       await createBookmark(bookmarkTitle);
-      await getBookmarkList();
+      await getBookmarkList('true');
     },
     onClickRemoveBookmark: async function (id: string) {
       const res = await removeBookmarkApi(id);
