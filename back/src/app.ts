@@ -28,7 +28,7 @@ mongoose
   .connect(process.env.MONGODB_URL!)
   .then(() => {
     app.listen(process.env.PORT, () => {
-      console.log("Started server with 8080");
+      console.log(`Started server with ${process.env.PORT}`);
     });
   })
   .catch((err) => console.log(err));
