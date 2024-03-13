@@ -19,6 +19,7 @@ export const getToken = async (
 ) => {
   console.log("getToken");
   const clientRefreshToken = req.cookies["refreshToken"];
+
   if (!clientRefreshToken) {
     return res.status(401).json("로그인이 필요합니다.");
   }
@@ -38,6 +39,8 @@ export const getToken = async (
       res.cookie("refreshToken", refreshToken, {
         maxAge: 60 * 60 * 24 * 1000,
         httpOnly: true,
+        sameSite: "none",
+        secure: true,
       });
 
       const user = await User.findById(userId);
@@ -118,6 +121,8 @@ export const getGoogleToken = async (
     res.cookie("refreshToken", refreshToken, {
       maxAge: 60 * 60 * 24 * 2 * 10000,
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     return res.redirect(302, process.env.REACT_APP_BASE_URL!);
@@ -132,7 +137,7 @@ export const userLogout = async (
   next: NextFunction
 ) => {
   console.log("userLogout");
-  res.clearCookie("refreshToken");
+  res.clearCookie("refreshToken", { maxAge: 0 });
 
   return res.status(200).json({ message: "Logout!" });
 };
