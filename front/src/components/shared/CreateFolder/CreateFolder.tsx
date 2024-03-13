@@ -10,7 +10,6 @@ const CreateFolder = ({ onClickCreateBookmark }: CreateFolderProps) => {
   const titleRef = useRef<HTMLInputElement>(null);
 
   const createBookmark = () => {
-    console.log(titleRef.current?.value);
     if (titleRef.current?.value! !== "") {
       onClickCreateBookmark(titleRef.current?.value!);
       setModifyMode(false);

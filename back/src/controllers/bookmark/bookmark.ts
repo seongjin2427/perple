@@ -35,8 +35,6 @@ export const getAllBookmark: RequestHandler = async (req, res, next) => {
     });
   }
 
-  console.log(user?.bookmarks.bookmark[0].videos);
-
   res.status(200).json({ bookmark: user?.bookmarks.bookmark });
 };
 
@@ -91,7 +89,7 @@ export const modifyTitleName: RequestHandler = async (req, res, next) => {
       bookmarkName: title,
     },
   });
-  console.log(result);
+
   res.status(200).json({ message: "업데이트 완료!" });
 };
 

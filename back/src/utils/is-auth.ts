@@ -34,7 +34,6 @@ const isAuth = async (req: Request, res: Response, next: NextFunction) => {
     return res.json({ errorMessage: "login needed" });
   }
 
-  console.log("decodedToken", decodedToken);
   req.userInfo = await User.findById(decodedToken?.userId);
 
   next();

@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { toggleSideMenu, userLogout } from 'store/globalSlice';
-import instance from 'api/instance';
+import { toggleSideMenu, userLogout } from "store/globalSlice";
+import instance from "api/instance";
 
 const useMenu = () => {
   const dispatch = useDispatch();
@@ -11,16 +11,15 @@ const useMenu = () => {
   const actions = {
     logout: async function () {
       const res = await instance.post(
-        '/auth/logout',
+        "/auth/logout",
         {},
         {
           withCredentials: true,
-        },
+        }
       );
-      console.log(res);
       dispatch(userLogout());
       dispatch(toggleSideMenu(false));
-      navigate('/');
+      navigate("/");
     },
     login: function () {},
     movePage: function (link: string) {

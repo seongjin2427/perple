@@ -27,7 +27,7 @@ export const getToken = async (
     const { userId, message } = verifyToken(
       clientRefreshToken
     ) as RefreshTokenType;
-    console.log("message", message);
+
     if (message === "Token is expired") {
       return res.json({ message: "refreshToken is expired" });
     }
@@ -94,7 +94,6 @@ export const getGoogleToken = async (
     const { data: fetchedUser } = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
     );
-    console.log("fetchedUser", fetchedUser);
 
     const { sub, email, name, picture } = fetchedUser;
     const userInformation = {
@@ -104,7 +103,6 @@ export const getGoogleToken = async (
       type: "google",
       profileImage: picture,
     };
-    console.log("userInformation", userInformation);
 
     const userInfo = await findUserBySnsId("google", sub);
     let refreshToken: string | undefined;
@@ -127,7 +125,7 @@ export const getGoogleToken = async (
 
     return res.redirect(302, process.env.REACT_APP_BASE_URL!);
   } catch (e) {
-    console.log("에러다", e);
+    console.log(e);
   }
 };
 
