@@ -53,7 +53,7 @@ export const addBookmark = async (
 
 export const createBookmark = async (bookmarkTitle: string) => {
   try {
-    const res = await instance.post('/bm/create/bookmark', { bookmarkTitle });
+    await instance.post('/bm/create/bookmark', { bookmarkTitle });
   } catch (e) {
     console.log(e);
   }

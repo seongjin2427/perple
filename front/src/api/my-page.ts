@@ -1,4 +1,4 @@
-import instance from 'api/instance';
+import instance from "api/instance";
 
 export interface GetUserDataType {
   email: string;
@@ -9,7 +9,7 @@ export interface GetUserDataType {
 
 export const getUser = async () => {
   try {
-    const { data } = await instance.get<GetUserDataType>('/user');
+    const { data } = await instance.get<GetUserDataType>("/user");
     return data;
   } catch (e) {
     console.log(e);
@@ -18,7 +18,7 @@ export const getUser = async () => {
 
 export const modifyUser = async (userInfo: GetUserDataType) => {
   try {
-    const { data } = await instance.put('/user', { userInfo });
+    await instance.put("/user", { userInfo });
   } catch (e) {
     console.log(e);
   }
@@ -26,6 +26,6 @@ export const modifyUser = async (userInfo: GetUserDataType) => {
 
 export const withDrawUser = async () => {
   try {
-    const { data } = await instance.post('/user/withdraw');
+    await instance.post("/user/withdraw");
   } catch (e) {}
 };
