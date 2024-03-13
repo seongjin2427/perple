@@ -137,7 +137,11 @@ export const userLogout = async (
   next: NextFunction
 ) => {
   console.log("userLogout");
-  res.clearCookie("refreshToken", { maxAge: 0 });
+  res.clearCookie("refreshToken", {
+    maxAge: 0,
+    sameSite: "none",
+    secure: true,
+  });
 
   return res.status(200).json({ message: "Logout!" });
 };
