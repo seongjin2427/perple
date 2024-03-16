@@ -11,6 +11,8 @@ Perple은 **'Personal Player'의 줄임말**입니다.
 
 유튜브 서비스 이용 중 불편함을 느낀 부분을 해소하고자 구현해보았습니다.
 
+사용해 보시려면 [여기](https://perple.netlify.app/)를 클릭해보세요!
+
 <br />
 
 # Perple 프로젝트 구조
